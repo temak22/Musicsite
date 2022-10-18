@@ -61,7 +61,7 @@ public class SearchController {
         model.addAttribute("albumsInBrowse", albumsInBrowse);
         model.addAttribute("songsInBrowse", songsInBrowse);
 
-        return "search";
+        return "main/search";
     }
 
     @GetMapping("/filter={filter}/albums")
@@ -84,7 +84,7 @@ public class SearchController {
         }
         model.addAttribute("albumsInBrowse", albumsInBrowse);
 
-        return "browseAlbums";
+        return "main/browseAlbums";
     }
 
     @GetMapping("/filter={filter}/artists")
@@ -101,7 +101,7 @@ public class SearchController {
             model.addAttribute("filter", null);
 
         model.addAttribute("artists", artists);
-        return "browseArtists";
+        return "main/browseArtists";
     }
 
     @GetMapping("/filter={filter}/songs")
@@ -126,6 +126,6 @@ public class SearchController {
         }
         model.addAttribute("songsInBrowse", songsInBrowse);
 
-        return "browseSongs";
+        return "main/browseSongs";
     }
 }

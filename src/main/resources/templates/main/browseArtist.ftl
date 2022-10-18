@@ -1,4 +1,4 @@
-<#import "parts/common.ftl" as c>
+<#import "../parts/common.ftl" as c>
 
 <@c.page>
     <#if artist.page_photo_file??>
@@ -28,7 +28,7 @@
                             <a style="color: crimson" href="/browse/albums/${song.album.album_id}">
                                 <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
                             </a>
-                            <div style="margin-left: 10px; width: fit-content">
+                            <div style="margin-left: 10px; width: 60%; display: flex; justify-content: center; flex-direction: column">
                                 <h6 style="font-size: smaller; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.name}</h6>
                                 <div class="row" style="margin-left: 0;">
                                     <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>
@@ -49,7 +49,7 @@
                                 <a style="color: crimson" href="/browse/albums/${song.album.album_id}">
                                     <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
                                 </a>
-                                <div style="margin-left: 10px;">
+                                <div style="margin-left: 10px; width: 60%; display: flex; justify-content: center; flex-direction: column">
                                     <h6 style="font-size: smaller; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.name}</h6>
                                     <div class="row" style="margin-left: 0;">
                                         <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>
@@ -70,7 +70,7 @@
                                 <a style="color: crimson" href="/browse/albums/${song.album.album_id}">
                                     <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
                                 </a>
-                                <div style="margin-left: 10px;">
+                                <div style="margin-left: 10px; width: 60%; display: flex; justify-content: center; flex-direction: column">
                                     <h6 style="font-size: smaller; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.name}</h6>
                                     <div class="row" style="margin-left: 0;">
                                         <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>

@@ -38,7 +38,7 @@ public class BrowseController {
         }
         model.put("albumsInBrowse", albumsInBrowse);
 
-        return "browse";
+        return "main/browse";
     }
 
     @GetMapping("/albums")
@@ -53,7 +53,7 @@ public class BrowseController {
         }
         model.put("albumsInBrowse", albumsInBrowse);
 
-        return "browseAlbums";
+        return "main/browseAlbums";
     }
 
     @GetMapping("/albums/{id}")
@@ -78,7 +78,7 @@ public class BrowseController {
         AlbumInBrowse albumInBrowse = new AlbumInBrowse(album, artist);
         model.put("albumInBrowse", albumInBrowse);
 
-        return "browseAlbum";
+        return "main/browseAlbum";
     }
 
     @GetMapping("/artists/{id}")
@@ -102,7 +102,7 @@ public class BrowseController {
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.put("albums", albums);
 
-        return "browseArtist";
+        return "main/browseArtist";
     }
 
     @GetMapping("/artists/{id}/albums")
@@ -110,7 +110,7 @@ public class BrowseController {
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.put("albums", albums);
 
-        return "browseArtistAlbums";
+        return "main/browseArtistAlbums";
     }
 
     @GetMapping("/artists/{id}/songs")
@@ -128,6 +128,6 @@ public class BrowseController {
         }
         model.put("songsInArtistBrowse", songsInArtistBrowse);
 
-        return "browseArtistSongs";
+        return "main/browseArtistSongs";
     }
 }

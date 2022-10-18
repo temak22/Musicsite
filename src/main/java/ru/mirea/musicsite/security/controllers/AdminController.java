@@ -40,14 +40,14 @@ public class AdminController {
 
     @GetMapping("")
     public String home(Map<String, Object> model) {
-            return "admin";
+            return "admin/admin";
     }
 
     @GetMapping("/createAlbum")
     public String formAlbum(Map<String, Object> model) {
         Iterable<Album> albums = adminService.indexAlbum();
         model.put("albums", albums);
-        return "adminAlbumCreate";
+        return "admin/adminAlbumCreate";
     }
 
     @GetMapping("/")
@@ -97,7 +97,7 @@ public class AdminController {
     @GetMapping("/createArtist")
     public String formArtist(Map<String, Object> model) {
         model.put("new_artist_id", artist_id);
-        return "adminArtistCreate";
+        return "admin/adminArtistCreate";
     }
 
     @PostMapping("/createArtist")
@@ -143,7 +143,7 @@ public class AdminController {
         model.put("main_artist_id", artist_id);
         model.put("album", album);
 
-        return "adminSonglistCreate";
+        return "admin/adminSonglistCreate";
     }
 
     @PostMapping("/createSonglist")
@@ -182,7 +182,7 @@ public class AdminController {
 
     @GetMapping("/updateArtist")
     public String formUpdateArtist(Map<String, Object> model) {
-        return "adminArtistUpdate";
+        return "admin/adminArtistUpdate";
     }
 
     @PostMapping("/updateArtist")
@@ -226,7 +226,7 @@ public class AdminController {
     @GetMapping("/user")
     public String userList(Model model) {
         model.addAttribute("users", adminService.getAllUsers());
-        return "userlist";
+        return "admin/userlist";
     }
 
     @GetMapping("/user/{user_id}")
@@ -234,7 +234,7 @@ public class AdminController {
                                Model model) {
         model.addAttribute("user_edit", adminService.getUserById(user_id));
         model.addAttribute("roles", Role.values());
-        return "user_edit";
+        return "admin/user_edit";
     }
 
     @PostMapping("/user")

@@ -1,13 +1,12 @@
-<#import "parts/common.ftl" as c>
+<#import "../parts/common.ftl" as c>
 
 <@c.page>
-    <br>
-    <hr>
     <div style="display: flex; align-items: center; justify-content: flex-end;">
         <div style="flex: 1">
             <h5>Albums</h5>
         </div>
     </div>
+    <hr style="margin-top: 2px">
     <div class="row">
         <#list albums as album>
             <div style="margin: 0px">

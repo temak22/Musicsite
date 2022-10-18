@@ -1,4 +1,4 @@
-<#import "parts/common.ftl" as c>
+<#import "../parts/common.ftl" as c>
 
 <@c.page>
     <div style="display: flex; flex-direction: column; width: fit-content">

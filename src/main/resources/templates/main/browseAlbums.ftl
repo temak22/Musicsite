@@ -1,4 +1,4 @@
-<#import "parts/common.ftl" as c>
+<#import "../parts/common.ftl" as c>
 
 <@c.page>
     <hr>
@@ -6,13 +6,10 @@
         <div style="flex: 1">
             <h4>Albums</h4>
         </div>
-        <div style="">
-            <a style="color: crimson" href="/browse/albums">see all</a>
-        </div>
         <hr>
     </div>
     <div class="row">
-        <#list albumsInBrowse[0..*5] as albumInBrowse>
+        <#list albumsInBrowse as albumInBrowse>
             <div style="margin: 0px">
                 <div style="margin: 10px">
                     <a href="/browse/albums/${albumInBrowse.album.album_id}">
@@ -30,8 +27,4 @@
             <h5>No items</h5>
         </#list>
     </div>
-
-    <br>
-    <div><h4>Charts</h4></div>
-    <hr>
 </@c.page>
