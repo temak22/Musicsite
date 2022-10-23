@@ -72,6 +72,10 @@ public class AdminService implements UserDetailsService {
         songDAO.update(song.getSong_id(), song);
     }
 
+    public boolean checkIfSongExist(int id) {
+        return songDAO.show(id) != null;
+    }
+
     public int saveSongInAlbum(SongInAlbum songInAlbum) {
         return songInAlbumDAO.save(songInAlbum);
     }
@@ -80,16 +84,24 @@ public class AdminService implements UserDetailsService {
         songInAlbumDAO.update(songInAlbum.getAlbum_id(), songInAlbum.getSong_id(), songInAlbum);
     }
 
+    public int saveSongInChart(SongInChart songInChart) {
+        return songInChartDAO.save(songInChart);
+    }
+
+    public List<SongInChart> showSongsByChartId(int id) {
+        return songInChartDAO.showByChartId(id);
+    }
+
     public List<SongInAlbum> showSongsByAlbumId(int id) {
         return songInAlbumDAO.showByAlbumId(id);
     }
 
-    public void deleteSong(int id) {
-        songDAO.delete(id);
+    public void deleteSongInChart(int chart_id, int song_id) {
+        songInChartDAO.delete(chart_id, song_id);
     }
 
-    public void deleteSongInAlbum(int album_id, int song_id) {
-        songInAlbumDAO.delete(album_id, song_id);
+    public void deleteSong(int id) {
+        songDAO.delete(id);
     }
 
     public User getUserById(int id) {
@@ -111,6 +123,15 @@ public class AdminService implements UserDetailsService {
     public int saveChart(Chart chart) {
         return chartDAO.save(chart);
     }
+
+    public void updateChart(Chart chart) {
+        chartDAO.update(chart.getChart_id(), chart);
+    }
+
+    public void deleteChart(int id) {
+        chartDAO.delete(id);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

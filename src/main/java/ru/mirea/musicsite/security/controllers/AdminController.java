@@ -31,6 +31,7 @@ public class AdminController {
     //variables for Model
     private int artist_id = 0;
     private Album album;
+    private Chart chart;
 
     @GetMapping("")
     public String home(Map<String, Object> model) {
@@ -176,9 +177,61 @@ public class AdminController {
             file.transferTo(new File(uploadPath + "/charts/" + resultFilename));
             chart.setCover_file(resultFilename);
         }
-        adminService.saveChart(chart);
+        int chart_id = adminService.saveChart(chart);
+        chart.setChart_id(chart_id);
 
-        return "redirect:/admin/createChart";
+        this.chart = chart;
+
+        return "redirect:/admin/createChartlist";
+    }
+
+    @GetMapping("/updateChart")
+    public String formUpdateChart(Map<String, Object> model) {
+        return "admin/adminChartUpdate";
+    }
+
+    @PostMapping("/updateChart")
+    public String updateChart(
+            @RequestParam int chart_id,
+            @RequestParam String name,
+            @RequestParam("file") MultipartFile file,
+            Map<String, Object> model) throws IOException {
+
+        Chart chart = new Chart(chart_id, name,null);
+        if (file != null && !file.isEmpty()) {
+            File uploadDir = new File(uploadPath + "/charts");
+
+            if (!uploadDir.exists())
+                uploadDir.mkdir();
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + ".PNG";
+            file.transferTo(new File(uploadPath + "/charts/" + resultFilename));
+            chart.setCover_file(resultFilename);
+        }
+        adminService.updateChart(chart);
+
+        List<SongInChart> songsInChart = adminService.showSongsByChartId(chart_id);
+        for (SongInChart songInChart : songsInChart) {
+            adminService.deleteSongInChart(songInChart.getChart_id(), songInChart.getSong_id());
+        }
+
+        this.chart = chart;
+        return "redirect:/admin/createChartlist";
+    }
+
+    @GetMapping("/deleteChart")
+    public String formDeleteChart(Map<String, Object> model) {
+        return "admin/adminChartDelete";
+    }
+
+    @PostMapping("/deleteChart")
+    public String deleteChart(
+            @RequestParam int chart_id,
+            Map<String, Object> model) throws IOException {
+
+        adminService.deleteChart(chart_id);
+        return "redirect:/admin";
     }
 
     @GetMapping("/createArtist")
@@ -265,6 +318,37 @@ public class AdminController {
         }
 
         return "redirect:/admin/createAlbum";
+    }
+
+    @GetMapping("/createChartlist")
+    public String formChartlist(Map<String, Object> model) {
+        model.put("chart", chart);
+        return "admin/adminChartlistCreate";
+    }
+
+    @PostMapping("/createChartlist")
+    public String addChartlist(
+            @RequestParam String chartlist,
+            Map<String, Object> model) {
+
+        String[] songs = chartlist.split("\r\n");
+        for (String songData : songs) {
+            if (songData.trim().isEmpty())
+                continue;
+
+            String[] data = songData.split(" ");
+            if (data.length < 2)
+                continue;
+            if (!isParsable(data[0]) || !isParsable(data[1]))
+                continue;
+            if (!adminService.checkIfSongExist(Integer.parseInt(data[0])))
+                continue;
+
+            SongInChart songInChart = new SongInChart(chart.getChart_id(), Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+            adminService.saveSongInChart(songInChart);
+        }
+
+        return "redirect:/admin/createChart";
     }
 
     @GetMapping("/updateArtist")

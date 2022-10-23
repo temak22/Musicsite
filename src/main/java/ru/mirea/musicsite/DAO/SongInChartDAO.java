@@ -41,18 +41,18 @@ public class SongInChartDAO {
                         new BeanPropertyRowMapper<>(SongInChart.class));
     }
 
-    public void update(int album_id, int song_id, SongInChart updatedSongInChart) {
+    public void update(int chart_id, int song_id, SongInChart updatedSongInChart) {
         jdbcTemplate.update(
-                "UPDATE Song_in_chart SET Serial_number=? WHERE Song_id=? AND Album_id=?",
+                "UPDATE Song_in_chart SET Serial_number=? WHERE Song_id=? AND Chart_id=?",
                 updatedSongInChart.getSerial_number(),
                 song_id,
-                album_id);
+                chart_id);
     }
 
-    public void delete(int album_id, int song_id) {
+    public void delete(int chart_id, int song_id) {
         jdbcTemplate.update(
-                "DELETE FROM Song_in_chart WHERE Song_id=? AND Album_id=?",
+                "DELETE FROM Song_in_chart WHERE Song_id=? AND Chart_id=?",
                 song_id,
-                album_id);
+                chart_id);
     }
 }
