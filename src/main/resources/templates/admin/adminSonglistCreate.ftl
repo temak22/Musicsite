@@ -13,7 +13,7 @@
             </label>
             <br>
             <input type="hidden" value="${_csrf.token}" name="_csrf">
-            <button type="submit">Send</button>
+            <button type="submit">Save</button>
         </form>
     </div>
 </@c.page>

@@ -59,7 +59,7 @@ public class AlbumDAO {
 
     public void update(int id, Album updatedAlbum) {
         jdbcTemplate.update(
-                "UPDATE Album SET Name=?, Release_date=?, Style=?, Main_artist_id=?, Cover_file=? WHERE Album_id=?",
+                "UPDATE Album SET Name=?, Release_date=?, Style=?, Artist_id=?, Cover_file=? WHERE Album_id=?",
                 updatedAlbum.getName(),
                 updatedAlbum.getRelease_date(),
                 updatedAlbum.getStyle(),

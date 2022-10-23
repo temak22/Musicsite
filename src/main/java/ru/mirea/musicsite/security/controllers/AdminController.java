@@ -14,10 +14,7 @@ import ru.mirea.musicsite.security.services.AdminService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -126,6 +123,11 @@ public class AdminController {
         }
         adminService.updateAlbum(album);
 
+        List<SongInAlbum> songsInAlbum = adminService.showSongsByAlbumId(album_id);
+        for (SongInAlbum songInAlbum : songsInAlbum) {
+            adminService.deleteSong(songInAlbum.getSong_id());
+        }
+
         this.artist_id = artist_id;
         this.album = album;
 
@@ -133,6 +135,20 @@ public class AdminController {
             return "redirect:/admin/createArtist";
         else
             return "redirect:/admin/createSonglist";
+    }
+
+    @GetMapping("/deleteAlbum")
+    public String formDeleteAlbum(Map<String, Object> model) {
+        return "admin/adminAlbumDelete";
+    }
+
+    @PostMapping("/deleteAlbum")
+    public String deleteAlbum(
+            @RequestParam int album_id,
+            Map<String, Object> model) throws IOException {
+
+        adminService.deleteAlbum(album_id);
+        return "redirect:/admin";
     }
 
     @GetMapping("/createChart")

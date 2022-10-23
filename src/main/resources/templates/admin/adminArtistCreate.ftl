@@ -20,7 +20,7 @@
                 <input type="file" name="pageFile" required>
             </div>
             <input type="hidden" value="${_csrf.token}" name="_csrf">
-            <button type="submit" style="margin-top: 5px">Add</button>
+            <button type="submit" style="margin-top: 5px">Create</button>
         </form>
     </div>
 </@c.page>

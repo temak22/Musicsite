@@ -2,14 +2,8 @@ package ru.mirea.musicsite.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mirea.musicsite.DAO.AlbumDAO;
-import ru.mirea.musicsite.DAO.ArtistDAO;
-import ru.mirea.musicsite.DAO.SongDAO;
-import ru.mirea.musicsite.DAO.SongInAlbumDAO;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
+import ru.mirea.musicsite.DAO.*;
+import ru.mirea.musicsite.entities.*;
 
 import java.util.List;
 
@@ -27,6 +21,13 @@ public class BrowseService {
 
     @Autowired
     private SongInAlbumDAO songInAlbumDAO;
+
+    @Autowired
+    private ChartDAO chartDAO;
+
+    @Autowired
+    private SongInChartDAO songInChartDAO;
+
 
     public List<Album> indexAlbum() {
         return albumDAO.index();
@@ -60,4 +61,17 @@ public class BrowseService {
     public List<Album> showAlbumsByArtistId(int id) {
         return albumDAO.showByArtistId(id);
     }
+
+    public List<Chart> indexChart() {
+        return chartDAO.index();
+    }
+
+    public List<SongInChart> showSongsByChartId(int id) {
+        return songInChartDAO.showByChartId(id);
+    }
+
+    public Chart showChart(int id) {
+        return chartDAO.show(id);
+    }
+
 }

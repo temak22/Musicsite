@@ -5,14 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.mirea.musicsite.DAO.AlbumDAO;
-import ru.mirea.musicsite.DAO.ArtistDAO;
-import ru.mirea.musicsite.DAO.SongDAO;
-import ru.mirea.musicsite.DAO.SongInAlbumDAO;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
+import ru.mirea.musicsite.DAO.*;
+import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.security.repositories.UserRepo;
 
@@ -34,6 +28,12 @@ public class AdminService implements UserDetailsService {
     private SongInAlbumDAO songInAlbumDAO;
 
     @Autowired
+    private ChartDAO chartDAO;
+
+    @Autowired
+    private SongInChartDAO songInChartDAO;
+
+    @Autowired
     private UserRepo userRepo;
 
     public List<Album> indexAlbum() {
@@ -44,10 +44,16 @@ public class AdminService implements UserDetailsService {
         return albumDAO.save(album);
     }
 
+    public void updateAlbum(Album album) {
+        albumDAO.update(album.getAlbum_id(), album);
+    }
+
+    public void deleteAlbum(int id) {
+        albumDAO.delete(id);
+    }
+
     public boolean checkIfArtistExist(int id) {
-        if (artistDAO.show(id) == null)
-            return false;
-        return true;
+        return artistDAO.show(id) != null;
     }
 
     public int saveArtist(Artist artist) {
@@ -62,8 +68,28 @@ public class AdminService implements UserDetailsService {
         return songDAO.save(song);
     }
 
+    public void updateSong(Song song) {
+        songDAO.update(song.getSong_id(), song);
+    }
+
     public int saveSongInAlbum(SongInAlbum songInAlbum) {
         return songInAlbumDAO.save(songInAlbum);
+    }
+
+    public void updateSongInAlbum(SongInAlbum songInAlbum) {
+        songInAlbumDAO.update(songInAlbum.getAlbum_id(), songInAlbum.getSong_id(), songInAlbum);
+    }
+
+    public List<SongInAlbum> showSongsByAlbumId(int id) {
+        return songInAlbumDAO.showByAlbumId(id);
+    }
+
+    public void deleteSong(int id) {
+        songDAO.delete(id);
+    }
+
+    public void deleteSongInAlbum(int album_id, int song_id) {
+        songInAlbumDAO.delete(album_id, song_id);
     }
 
     public User getUserById(int id) {
@@ -76,6 +102,14 @@ public class AdminService implements UserDetailsService {
 
     public List<User> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    public List<Chart> indexChart() {
+        return chartDAO.index();
+    }
+
+    public int saveChart(Chart chart) {
+        return chartDAO.save(chart);
     }
 
     @Override
