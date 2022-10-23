@@ -3,6 +3,7 @@ package ru.mirea.musicsite;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//TODO: 1. Add all entities. 2. Listener logic ('+' on tracks). 3. Music player.
 @SpringBootApplication
 public class MusicsiteApplication {
 

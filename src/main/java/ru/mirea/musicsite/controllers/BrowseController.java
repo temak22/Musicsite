@@ -5,14 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
+import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
 import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.viewEntity.SongInArtistBrowse;
 import ru.mirea.musicsite.viewEntity.SongInAlbumBrowse;
+import ru.mirea.musicsite.viewEntity.SongInBrowse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +35,9 @@ public class BrowseController {
             albumsInBrowse.add(new AlbumInBrowse(album, artist));
         }
         model.put("albumsInBrowse", albumsInBrowse);
+
+        List<Chart> charts = browseService.indexChart();
+        model.put("charts", charts);
 
         return "main/browse";
     }
@@ -79,6 +80,38 @@ public class BrowseController {
         model.put("albumInBrowse", albumInBrowse);
 
         return "main/browseAlbum";
+    }
+
+    @GetMapping("/charts")
+    public String browseCharts(Map<String, Object> model) {
+        List<Chart> charts = browseService.indexChart();
+        model.put("charts", charts);
+
+        return "main/browseCharts";
+    }
+
+    @GetMapping("/charts/{id}")
+    public String chartPage(@PathVariable int id, Map<String, Object> model) {
+        List<SongInChart> songsInChart = browseService.showSongsByChartId(id);
+        ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+
+        for (SongInChart songInChart : songsInChart) {
+            int song_id = songInChart.getSong_id();
+            Song song = browseService.showSong(song_id);
+            Artist artist = browseService.showArtist(song.getMain_artist_id());
+            Album album = browseService.showAlbumBySongId(song_id);
+            songsInBrowse.add(new SongInBrowse(
+                    song_id,
+                    song.getName(),
+                    artist,
+                    album));
+        }
+        model.put("songsInBrowse", songsInBrowse);
+
+        Chart chart = browseService.showChart(id);
+        model.put("chart", chart);
+
+        return "main/browseChart";
     }
 
     @GetMapping("/artists/{id}")

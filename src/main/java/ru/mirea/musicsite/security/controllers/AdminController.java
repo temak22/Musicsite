@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
+import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.Role;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.security.services.AdminService;
@@ -92,6 +89,80 @@ public class AdminController {
             return "redirect:/admin/createArtist";
         else
             return "redirect:/admin/createSonglist";
+    }
+
+    @GetMapping("/updateAlbum")
+    public String formUpdateAlbum(Map<String, Object> model) {
+        return "admin/adminAlbumUpdate";
+    }
+
+    @PostMapping("/updateAlbum")
+    public String updateAlbum(
+            @RequestParam int album_id,
+            @RequestParam String name,
+            @RequestParam Date release_date,
+            @RequestParam String style,
+            @RequestParam int artist_id,
+            @RequestParam("file") MultipartFile file,
+            Map<String, Object> model) throws IOException {
+
+        boolean check = adminService.checkIfArtistExist(artist_id);
+        if (!check) {
+            Artist artist = new Artist(artist_id, "unknown", null, null, null, null);
+            adminService.saveArtist(artist);
+        }
+
+        Album album = new Album(album_id, name, release_date, style, artist_id, null);
+        if (file != null && !file.isEmpty()) {
+            File uploadDir = new File(uploadPath + "/covers");
+
+            if (!uploadDir.exists())
+                uploadDir.mkdir();
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + ".PNG";
+            file.transferTo(new File(uploadPath + "/covers/" + resultFilename));
+            album.setCover_file(resultFilename);
+        }
+        adminService.updateAlbum(album);
+
+        this.artist_id = artist_id;
+        this.album = album;
+
+        if (!check)
+            return "redirect:/admin/createArtist";
+        else
+            return "redirect:/admin/createSonglist";
+    }
+
+    @GetMapping("/createChart")
+    public String formChart(Map<String, Object> model) {
+        Iterable<Chart> charts = adminService.indexChart();
+        model.put("charts", charts);
+        return "admin/adminChartCreate";
+    }
+
+    @PostMapping("/createChart")
+    public String addChart(
+            @RequestParam String name,
+            @RequestParam("file") MultipartFile file,
+            Map<String, Object> model) throws IOException {
+
+        Chart chart = new Chart(0, name,null);
+        if (file != null && !file.isEmpty()) {
+            File uploadDir = new File(uploadPath + "/charts");
+
+            if (!uploadDir.exists())
+                uploadDir.mkdir();
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + ".PNG";
+            file.transferTo(new File(uploadPath + "/charts/" + resultFilename));
+            chart.setCover_file(resultFilename);
+        }
+        adminService.saveChart(chart);
+
+        return "redirect:/admin/createChart";
     }
 
     @GetMapping("/createArtist")
@@ -222,6 +293,7 @@ public class AdminController {
 
         return "redirect:/admin";
     }
+
 
     @GetMapping("/user")
     public String userList(Model model) {
