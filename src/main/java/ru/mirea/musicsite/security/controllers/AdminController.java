@@ -32,6 +32,7 @@ public class AdminController {
     private int artist_id = 0;
     private Album album;
     private Chart chart;
+    private boolean edit_songs;
 
     @GetMapping("")
     public String home(Map<String, Object> model) {
@@ -82,6 +83,7 @@ public class AdminController {
 
         this.artist_id = artist_id;
         this.album = album;
+        this.edit_songs = true;
 
         if (!check)
             return "redirect:/admin/createArtist";
@@ -102,6 +104,7 @@ public class AdminController {
             @RequestParam String style,
             @RequestParam int artist_id,
             @RequestParam("file") MultipartFile file,
+            @RequestParam(required=false) boolean edit_songs,
             Map<String, Object> model) throws IOException {
 
         boolean check = adminService.checkIfArtistExist(artist_id);
@@ -124,18 +127,25 @@ public class AdminController {
         }
         adminService.updateAlbum(album);
 
+        this.edit_songs = edit_songs;
+        this.artist_id = artist_id;
+        this.album = album;
+
+        if (!edit_songs) {
+            if (!check)
+                return "redirect:/admin/createArtist";
+            return "redirect:/admin";
+        }
+
         List<SongInAlbum> songsInAlbum = adminService.showSongsByAlbumId(album_id);
         for (SongInAlbum songInAlbum : songsInAlbum) {
             adminService.deleteSong(songInAlbum.getSong_id());
         }
 
-        this.artist_id = artist_id;
-        this.album = album;
-
         if (!check)
             return "redirect:/admin/createArtist";
-        else
-            return "redirect:/admin/createSonglist";
+
+        return "redirect:/admin/createSonglist";
     }
 
     @GetMapping("/deleteAlbum")
@@ -195,6 +205,7 @@ public class AdminController {
             @RequestParam int chart_id,
             @RequestParam String name,
             @RequestParam("file") MultipartFile file,
+            @RequestParam(required=false) boolean edit_songs,
             Map<String, Object> model) throws IOException {
 
         Chart chart = new Chart(chart_id, name,null);
@@ -210,6 +221,9 @@ public class AdminController {
             chart.setCover_file(resultFilename);
         }
         adminService.updateChart(chart);
+
+        if (!edit_songs)
+            return "redirect:/admin";
 
         List<SongInChart> songsInChart = adminService.showSongsByChartId(chart_id);
         for (SongInChart songInChart : songsInChart) {
@@ -275,7 +289,10 @@ public class AdminController {
         }
         adminService.updateArtist(artist.getArtist_id(), artist);
 
-        return "redirect:/admin/createSonglist";
+        if (edit_songs)
+            return "redirect:/admin/createSonglist";
+        else
+            return "redirect:/admin";
     }
 
     @GetMapping("/createSonglist")

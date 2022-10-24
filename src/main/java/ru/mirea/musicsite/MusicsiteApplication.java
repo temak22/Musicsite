@@ -3,7 +3,7 @@ package ru.mirea.musicsite;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//TODO: 1. Add checkbox to move to songlistCreate. 2. Listener logic ('+' on tracks). 3. Music player.
+//TODO: 1. Listener logic ('+' on tracks). 2. Music player.
 @SpringBootApplication
 public class MusicsiteApplication {
 

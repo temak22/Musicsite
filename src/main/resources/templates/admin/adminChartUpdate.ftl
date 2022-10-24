@@ -12,6 +12,10 @@
             <input type="file" name="file" required>
             <br>
             <input type="hidden" value="${_csrf.token}" name="_csrf">
+            <div style="margin-top: 5px; margin-left: 5px" class="row">
+                <h7 style="margin-right: 10px">Edit songlist</h7>
+                <input type="checkbox" name="edit_songs">
+            </div>
             <button type="submit" style="margin-top:5px">Update</button>
         </form>
     </div>

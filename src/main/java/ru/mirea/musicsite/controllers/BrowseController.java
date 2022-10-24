@@ -175,6 +175,18 @@ public class BrowseController {
                     song.getName(),
                     album));
         }
+
+        List<FeatArtist> feats = browseService.showFeatsByArtistId(id);
+        for (FeatArtist feat : feats) {
+            int song_id = feat.getSong_id();
+            Song song = browseService.showSong(song_id);
+            Album album = browseService.showAlbumBySongId(song_id);
+
+            songsInArtistBrowse.add(new SongInArtistBrowse(
+                    song_id,
+                    song.getName(),
+                    album));
+        }
         model.put("songsInArtistBrowse", songsInArtistBrowse);
 
         return "main/browseArtistSongs";
