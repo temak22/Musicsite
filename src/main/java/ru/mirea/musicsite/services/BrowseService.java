@@ -28,6 +28,9 @@ public class BrowseService {
     @Autowired
     private SongInChartDAO songInChartDAO;
 
+    @Autowired
+    private FeatArtistDAO featArtistDAO;
+
 
     public List<Album> indexAlbum() {
         return albumDAO.index();
@@ -72,6 +75,10 @@ public class BrowseService {
 
     public Chart showChart(int id) {
         return chartDAO.show(id);
+    }
+
+    public List<FeatArtist> showFeatsByArtistId(int id) {
+        return featArtistDAO.showByArtistId(id);
     }
 
 }

@@ -7,6 +7,8 @@ import lombok.Setter;
 import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Artist;
 
+import java.util.List;
+
 
 @Setter
 @Getter

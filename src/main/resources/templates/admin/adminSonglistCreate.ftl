@@ -6,8 +6,8 @@
     <hr>
     <div>
         <form method="post">
-            <div style="color: red; margin-bottom: 5px"><h7>!!! Input "[song name(String)] [is_lead_song(0/1)] [serial_number(int)]" !!!</h7></div>
-            <div style="color: red; margin-bottom: 5px"><h7>Example: song_name 1 1</h7></div>
+            <div style="color: red; margin-bottom: 5px"><h7>!!! Input "[song name(String)] [is lead song(0/1)] [serial number(int)] [feat. artist id(int) 1..*]" !!!</h7></div>
+            <div style="color: red; margin-bottom: 5px"><h7>Example: song_name 1 1 2_5</h7></div>
             <label>
                 <textarea name="songlist" cols="40" rows="5"></textarea>
             </label>

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.mirea.musicsite.DAO.FeatArtistDAO;
 import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
 import ru.mirea.musicsite.services.BrowseService;
@@ -65,6 +66,7 @@ public class BrowseController {
         for (SongInAlbum songInAlbum : songsInAlbum) {
             int song_id = songInAlbum.getSong_id();
             Song song = browseService.showSong(song_id);
+
             songsInBrowse.add(new SongInAlbumBrowse(
                     song_id,
                     song.getName(),
@@ -77,6 +79,7 @@ public class BrowseController {
         int artist_id = album.getArtist_id();
         Artist artist = browseService.showArtist(artist_id);
         AlbumInBrowse albumInBrowse = new AlbumInBrowse(album, artist);
+
         model.put("albumInBrowse", albumInBrowse);
 
         return "main/browseAlbum";
@@ -121,15 +124,28 @@ public class BrowseController {
 
         List<Song> songs = browseService.showSongsByArtistId(id);
         ArrayList<SongInArtistBrowse> songsInArtistBrowse = new ArrayList<>();
-
         for (Song song : songs) {
             int song_id = song.getSong_id();
             Album album = browseService.showAlbumBySongId(song_id);
+
             songsInArtistBrowse.add(new SongInArtistBrowse(
                     song_id,
                     song.getName(),
                     album));
         }
+
+        List<FeatArtist> feats = browseService.showFeatsByArtistId(id);
+        for (FeatArtist feat : feats) {
+            int song_id = feat.getSong_id();
+            Song song = browseService.showSong(song_id);
+            Album album = browseService.showAlbumBySongId(song_id);
+
+            songsInArtistBrowse.add(new SongInArtistBrowse(
+                    song_id,
+                    song.getName(),
+                    album));
+        }
+
         model.put("songsInArtistBrowse", songsInArtistBrowse);
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);

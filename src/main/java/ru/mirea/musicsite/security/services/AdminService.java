@@ -34,6 +34,9 @@ public class AdminService implements UserDetailsService {
     private SongInChartDAO songInChartDAO;
 
     @Autowired
+    private FeatArtistDAO featArtistDAO;
+
+    @Autowired
     private UserRepo userRepo;
 
     public List<Album> indexAlbum() {
@@ -130,6 +133,10 @@ public class AdminService implements UserDetailsService {
 
     public void deleteChart(int id) {
         chartDAO.delete(id);
+    }
+
+    public int saveFeatArtist(FeatArtist featArtist) {
+        return featArtistDAO.save(featArtist);
     }
 
 

@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeaturingArtist {
+public class FeatArtist {
     private int song_id;
     private int feat_artist_id;
-    private int is_in_name_of_song;
 }

@@ -313,6 +313,18 @@ public class AdminController {
             int song_id = adminService.saveSong(song);
             song.setSong_id(song_id);
 
+            if (data.length > 3) {
+                String[] feats = data[3].split("_");
+                for (String feat : feats) {
+                    if (!isParsable(feat))
+                        continue;
+                    if (!adminService.checkIfArtistExist(Integer.parseInt(feat)))
+                        continue;
+                    FeatArtist featArtist = new FeatArtist(song_id, Integer.parseInt(feat));
+                    adminService.saveFeatArtist(featArtist);
+                }
+            }
+
             SongInAlbum songInAlbum = new SongInAlbum(album.getAlbum_id(), song.getSong_id(), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
             adminService.saveSongInAlbum(songInAlbum);
         }
