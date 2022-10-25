@@ -28,42 +28,26 @@ public class SearchService {
     @Autowired
     private SongInAlbumDAO songInAlbumDAO;
 
-    public List<Album> indexAlbum() {
-        return albumDAO.index();
-    }
+
 
     public Artist showArtist(int id) {
         return artistDAO.show(id);
     }
 
-    public List<SongInAlbum> showSongsByAlbumId(int id) {
-        return songInAlbumDAO.showByAlbumId(id);
+    public List<Artist> showArtistsByPartName(String partname) {
+        return artistDAO.showByPartName(partname + "%", "% " + partname + "%");
     }
 
-    public Song showSong(int id) {
-        return songDAO.show(id);
-    }
-
-    public Album showAlbum(int id) {
-        return albumDAO.show(id);
-    }
 
     public Album showAlbumBySongId(int id) {
         SongInAlbum songInAlbum = songInAlbumDAO.showBySongId(id);
         return albumDAO.show(songInAlbum.getAlbum_id());
     }
 
-    public List<Song> showSongsByArtistId(int id) {
-        return songDAO.showByArtistId(id);
-    }
-
     public List<Album> showAlbumsByPartName(String partname) {
         return albumDAO.showByPartName(partname + "%", "% " + partname + "%");
     }
 
-    public List<Artist> showArtistsByPartName(String partname) {
-        return artistDAO.showByPartName(partname + "%", "% " + partname + "%");
-    }
 
     public List<Song> showSongsByPartName(String partname) {
         return songDAO.showByPartName(partname + "%", "% " + partname + "%");

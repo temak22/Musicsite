@@ -39,6 +39,7 @@ public class AdminService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
+
     public List<Album> indexAlbum() {
         return albumDAO.index();
     }
@@ -55,6 +56,7 @@ public class AdminService implements UserDetailsService {
         albumDAO.delete(id);
     }
 
+
     public boolean checkIfArtistExist(int id) {
         return artistDAO.show(id) != null;
     }
@@ -67,57 +69,46 @@ public class AdminService implements UserDetailsService {
         artistDAO.update(id, artist);
     }
 
-    public int saveSong(Song song) {
-        return songDAO.save(song);
+
+    public int saveFeatArtist(FeatArtist featArtist) {
+        return featArtistDAO.save(featArtist);
     }
 
-    public void updateSong(Song song) {
-        songDAO.update(song.getSong_id(), song);
-    }
 
     public boolean checkIfSongExist(int id) {
         return songDAO.show(id) != null;
     }
 
-    public int saveSongInAlbum(SongInAlbum songInAlbum) {
-        return songInAlbumDAO.save(songInAlbum);
-    }
-
-    public void updateSongInAlbum(SongInAlbum songInAlbum) {
-        songInAlbumDAO.update(songInAlbum.getAlbum_id(), songInAlbum.getSong_id(), songInAlbum);
-    }
-
-    public int saveSongInChart(SongInChart songInChart) {
-        return songInChartDAO.save(songInChart);
-    }
-
-    public List<SongInChart> showSongsByChartId(int id) {
-        return songInChartDAO.showByChartId(id);
-    }
-
-    public List<SongInAlbum> showSongsByAlbumId(int id) {
-        return songInAlbumDAO.showByAlbumId(id);
-    }
-
-    public void deleteSongInChart(int chart_id, int song_id) {
-        songInChartDAO.delete(chart_id, song_id);
+    public int saveSong(Song song) {
+        return songDAO.save(song);
     }
 
     public void deleteSong(int id) {
         songDAO.delete(id);
     }
 
-    public User getUserById(int id) {
-        return userRepo.findById(id);
+
+    public int saveSongInAlbum(SongInAlbum songInAlbum) {
+        return songInAlbumDAO.save(songInAlbum);
     }
 
-    public void saveUser(User user) {
-        userRepo.save(user);
+    public List<SongInAlbum> showSongsByAlbumId(int id) {
+        return songInAlbumDAO.showByAlbumId(id);
     }
 
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+
+    public int saveSongInChart(SongInChart songInChart) {
+        return songInChartDAO.save(songInChart);
     }
+
+    public void deleteSongInChart(int chart_id, int song_id) {
+        songInChartDAO.delete(chart_id, song_id);
+    }
+
+    public List<SongInChart> showSongsByChartId(int id) {
+        return songInChartDAO.showByChartId(id);
+    }
+
 
     public List<Chart> indexChart() {
         return chartDAO.index();
@@ -135,8 +126,17 @@ public class AdminService implements UserDetailsService {
         chartDAO.delete(id);
     }
 
-    public int saveFeatArtist(FeatArtist featArtist) {
-        return featArtistDAO.save(featArtist);
+
+    public void saveUser(User user) {
+        userRepo.save(user);
+    }
+
+    public User getUserById(int id) {
+        return userRepo.findById(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
     }
 
 

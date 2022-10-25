@@ -67,17 +67,10 @@ public class AdminController {
         }
 
         Album album = new Album(0, name, release_date, style, artist_id, null);
-        if (file != null && !file.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/covers");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String filename = createFileNameAndSaveFile(file, "/covers");
+        album.setCover_file(filename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            file.transferTo(new File(uploadPath + "/covers/" + resultFilename));
-            album.setCover_file(resultFilename);
-        }
         int album_id = adminService.saveAlbum(album);
         album.setAlbum_id(album_id);
 
@@ -114,17 +107,10 @@ public class AdminController {
         }
 
         Album album = new Album(album_id, name, release_date, style, artist_id, null);
-        if (file != null && !file.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/covers");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String filename = createFileNameAndSaveFile(file, "/covers");
+        album.setCover_file(filename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            file.transferTo(new File(uploadPath + "/covers/" + resultFilename));
-            album.setCover_file(resultFilename);
-        }
         adminService.updateAlbum(album);
 
         this.edit_songs = edit_songs;
@@ -176,17 +162,10 @@ public class AdminController {
             Map<String, Object> model) throws IOException {
 
         Chart chart = new Chart(0, name,null);
-        if (file != null && !file.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/charts");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String filename = createFileNameAndSaveFile(file, "/charts");
+        chart.setCover_file(filename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            file.transferTo(new File(uploadPath + "/charts/" + resultFilename));
-            chart.setCover_file(resultFilename);
-        }
         int chart_id = adminService.saveChart(chart);
         chart.setChart_id(chart_id);
 
@@ -209,17 +188,10 @@ public class AdminController {
             Map<String, Object> model) throws IOException {
 
         Chart chart = new Chart(chart_id, name,null);
-        if (file != null && !file.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/charts");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String filename = createFileNameAndSaveFile(file, "/charts");
+        chart.setCover_file(filename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            file.transferTo(new File(uploadPath + "/charts/" + resultFilename));
-            chart.setCover_file(resultFilename);
-        }
         adminService.updateChart(chart);
 
         if (!edit_songs)
@@ -265,28 +237,13 @@ public class AdminController {
             Map<String, Object> model) throws IOException {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
-        if (avatarFile != null && !avatarFile.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/avatars");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/avatars");
+        artist.setAvatar_file(avatarFilename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            avatarFile.transferTo(new File(uploadPath + "/avatars/" + resultFilename));
-            artist.setAvatar_file(resultFilename);
-        }
-        if (pageFile != null && !pageFile.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/pagePhotos");
+        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/pagePhotos");
+        artist.setPage_photo_file(pagePhotoFilename);
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            pageFile.transferTo(new File(uploadPath + "/pagePhotos/" + resultFilename));
-            artist.setPage_photo_file(resultFilename);
-        }
         adminService.updateArtist(artist.getArtist_id(), artist);
 
         if (edit_songs)
@@ -396,28 +353,13 @@ public class AdminController {
             Map<String, Object> model) throws IOException {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
-        if (avatarFile != null && !avatarFile.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/avatars");
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
+        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/avatars");
+        artist.setAvatar_file(avatarFilename);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            avatarFile.transferTo(new File(uploadPath + "/avatars/" + resultFilename));
-            artist.setAvatar_file(resultFilename);
-        }
-        if (pageFile != null && !pageFile.isEmpty()) {
-            File uploadDir = new File(uploadPath + "/pagePhotos");
+        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/pagePhotos");
+        artist.setPage_photo_file(pagePhotoFilename);
 
-            if (!uploadDir.exists())
-                uploadDir.mkdir();
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
-            pageFile.transferTo(new File(uploadPath + "/pagePhotos/" + resultFilename));
-            artist.setPage_photo_file(resultFilename);
-        }
         adminService.updateArtist(artist.getArtist_id(), artist);
 
         return "redirect:/admin";
@@ -475,5 +417,20 @@ public class AdminController {
         } catch (final NumberFormatException e) {
             return false;
         }
+    }
+
+    private String createFileNameAndSaveFile(MultipartFile file, String folder) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            File uploadDir = new File(uploadPath + folder);
+
+            if (!uploadDir.exists())
+                uploadDir.mkdir();
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + ".PNG";
+            file.transferTo(new File(uploadPath + folder + "/" + resultFilename));
+            return resultFilename;
+        }
+        return "";
     }
 }

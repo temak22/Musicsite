@@ -36,20 +36,12 @@ public class BrowseService {
         return albumDAO.index();
     }
 
-    public Artist showArtist(int id) {
-        return artistDAO.show(id);
-    }
-
-    public List<SongInAlbum> showSongsByAlbumId(int id) {
-        return songInAlbumDAO.showByAlbumId(id);
-    }
-
-    public Song showSong(int id) {
-        return songDAO.show(id);
-    }
-
     public Album showAlbum(int id) {
         return albumDAO.show(id);
+    }
+
+    public List<Album> showAlbumsByArtistId(int id) {
+        return albumDAO.showByArtistId(id);
     }
 
     public Album showAlbumBySongId(int id) {
@@ -57,28 +49,41 @@ public class BrowseService {
         return albumDAO.show(songInAlbum.getAlbum_id());
     }
 
-    public List<Song> showSongsByArtistId(int id) {
-        return songDAO.showByArtistId(id);
+
+    public Artist showArtist(int id) {
+        return artistDAO.show(id);
     }
 
-    public List<Album> showAlbumsByArtistId(int id) {
-        return albumDAO.showByArtistId(id);
-    }
-
-    public List<Chart> indexChart() {
-        return chartDAO.index();
-    }
-
-    public List<SongInChart> showSongsByChartId(int id) {
-        return songInChartDAO.showByChartId(id);
-    }
-
-    public Chart showChart(int id) {
-        return chartDAO.show(id);
-    }
 
     public List<FeatArtist> showFeatsByArtistId(int id) {
         return featArtistDAO.showByArtistId(id);
     }
 
+
+    public Song showSong(int id) {
+        return songDAO.show(id);
+    }
+
+    public List<Song> showSongsByArtistId(int id) {
+        return songDAO.showByArtistId(id);
+    }
+
+
+    public List<SongInAlbum> showSongsByAlbumId(int id) {
+        return songInAlbumDAO.showByAlbumId(id);
+    }
+
+
+    public List<SongInChart> showSongsByChartId(int id) {
+        return songInChartDAO.showByChartId(id);
+    }
+
+
+    public List<Chart> indexChart() {
+        return chartDAO.index();
+    }
+
+    public Chart showChart(int id) {
+        return chartDAO.show(id);
+    }
 }
