@@ -24,7 +24,7 @@
                 <input type="hidden" value="true" name="isMainAdmin">
             </#if>
         </#list>
-        <input type="hidden" value="${user_edit.id}" name="userId">
+        <input type="hidden" value="${user_edit.user_id}" name="userId">
         <input type="hidden" value="${_csrf.token}" name="_csrf">
         <button type="submit">Save</button>
     </form>

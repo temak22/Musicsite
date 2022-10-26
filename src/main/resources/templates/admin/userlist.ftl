@@ -21,7 +21,7 @@
                     </#list>
                 </td>
                 <td>
-                    <a href="/admin/user/${user_edit.id}">edit</a>
+                    <a href="/admin/user/${user_edit.user_id}">edit</a>
                 </td>
             </tr>
         </#list>

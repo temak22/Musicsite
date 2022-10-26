@@ -20,17 +20,28 @@
             </li>
         </ul>
 
-        <div style="width: 60%; margin-right: 40px">
-            <audio id="player" controls style="width: 100%">
-                <source src="/static/mp3/Kendrick_Lamar_-_HUMBLE.mp3" type="audio/mpeg">
-            </audio>
-        </div>
+        <#if isAdmin = true>
+            <div style="width: 60%; margin-right: 55px">
+                <audio id="player" controls style="width: 100%">
+                    <source src="/static/mp3/Kendrick_Lamar_-_HUMBLE.mp3" type="audio/mpeg">
+                </audio>
+            </div>
 
-        <div class="navbar-text mr-3">
-            <a href="/admin">Admin Panel</a>
-        </div>
+            <div class="navbar-text mr-3">
+                <a href="/admin">Admin Panel</a>
+            </div>
+        <#else>
+            <div style="width: 60%; margin-right: 180px">
+                <audio id="player" controls style="width: 100%">
+                    <source src="/static/mp3/Kendrick_Lamar_-_HUMBLE.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </#if>
 
-        <div class="navbar-text" style="margin-right: 10px">${name}</div>
-        <div class="navbar-item"><@l.logout /></div>
+        <#if name != "unknown">
+            <div class="navbar-text" style="margin-right: 10px">${name}</div>
+            <div class="navbar-item"><@l.logout /></div>
+        </#if>
+
     </div>
 </nav>
