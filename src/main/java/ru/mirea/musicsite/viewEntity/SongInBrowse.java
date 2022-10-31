@@ -19,4 +19,5 @@ public class SongInBrowse {
     private String name;
     private Artist artist;
     private Album album;
+    private int is_in_library;
 }

@@ -2,14 +2,8 @@ package ru.mirea.musicsite.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mirea.musicsite.DAO.AlbumDAO;
-import ru.mirea.musicsite.DAO.ArtistDAO;
-import ru.mirea.musicsite.DAO.SongDAO;
-import ru.mirea.musicsite.DAO.SongInAlbumDAO;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
+import ru.mirea.musicsite.DAO.*;
+import ru.mirea.musicsite.entities.*;
 
 import java.util.List;
 
@@ -27,6 +21,9 @@ public class SearchService {
 
     @Autowired
     private SongInAlbumDAO songInAlbumDAO;
+
+    @Autowired
+    private SongInLibraryDAO songInLibraryDAO;
 
 
 
@@ -51,5 +48,15 @@ public class SearchService {
 
     public List<Song> showSongsByPartName(String partname) {
         return songDAO.showByPartName(partname + "%", "% " + partname + "%");
+    }
+
+
+    public int addSongInLibrary(SongInLibrary songInLibrary) {
+        return songInLibraryDAO.save(songInLibrary);
+    }
+
+    public boolean isInLibrary(int user_id, int song_id) {
+        SongInLibrary songInLibrary = songInLibraryDAO.show(user_id, song_id);
+        return songInLibrary != null;
     }
 }

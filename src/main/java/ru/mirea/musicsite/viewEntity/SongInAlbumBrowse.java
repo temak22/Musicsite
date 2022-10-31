@@ -18,4 +18,5 @@ public class SongInAlbumBrowse {
     private String name;
     private int is_lead_song;
     private int serial_number;
+    private int is_in_library;
 }

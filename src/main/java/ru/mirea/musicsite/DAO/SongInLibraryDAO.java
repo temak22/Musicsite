@@ -32,7 +32,7 @@ public class SongInLibraryDAO {
                 songInLibrary.getSong_id());
     }
 
-    public int countBySongId(int id) {
+    public int countBySongIdInAllLibraries(int id) {
         return jdbcTemplate.query(
                         "SELECT COUNT(*) FROM Song_in_library WHERE Song_id=?",
                         new Object[]{id},
@@ -42,9 +42,19 @@ public class SongInLibraryDAO {
                 .orElse(0);
     }
 
+    public SongInLibrary show(int user_id, int song_id) {
+        return jdbcTemplate.query(
+                        "SELECT * FROM Song_in_library WHERE User_id=? AND Song_id=?",
+                        new Object[]{user_id, song_id},
+                        new BeanPropertyRowMapper<>(SongInLibrary.class))
+                .stream()
+                .findAny()
+                .orElse(null);
+    }
+
     public List<SongInLibrary> showByUserId(int id) {
         return jdbcTemplate.query(
-                "SELECT * FROM Song_in_library WHERE User_id=?",
+                "SELECT * FROM Song_in_library INNER JOIN Song ON Song_in_library.Song_id = Song.Song_id WHERE User_id=? ORDER BY Name",
                 new Object[]{id},
                 new BeanPropertyRowMapper<>(SongInLibrary.class));
     }

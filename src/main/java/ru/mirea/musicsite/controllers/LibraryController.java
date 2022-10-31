@@ -5,10 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Artist;
 import ru.mirea.musicsite.entities.Song;
@@ -19,8 +17,11 @@ import ru.mirea.musicsite.services.SearchService;
 import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
 import ru.mirea.musicsite.viewEntity.SongInBrowse;
 
+import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -49,11 +50,10 @@ public class LibraryController {
             int artist_id = song.getMain_artist_id();
             Artist artist = libraryService.showArtist(artist_id);
             Album album = libraryService.showAlbumBySongId(song_id);
-            songsInBrowse.add(new SongInBrowse(song.getSong_id(), song.getName(), artist, album));
+            songsInBrowse.add(new SongInBrowse(song.getSong_id(), song.getName(), artist, album, 1));
         }
 
         model.addAttribute("songsInBrowse", songsInBrowse);
         return "library/librarySongs";
     }
-
 }

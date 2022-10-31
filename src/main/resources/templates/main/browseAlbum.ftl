@@ -1,4 +1,6 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/addSond.ftl" as add>
+
 
 <@c.page>
     <hr>
@@ -19,20 +21,25 @@
     </div>
     <div>
         <br><br>
-        <#list songsInBrowse as songInBrowse>
+        <#list songsInBrowse as song>
             <hr style="margin: 0">
             <div style="margin: 0px">
                 <div class="row" style="height: 40px; margin: 6px;">
                     <div style="width: 20px; display: flex; align-items: center; justify-content: center">
-                        <#if songInBrowse.is_lead_song = 1>
+                        <#if song.is_lead_song = 1>
                             <h7 style="margin-bottom: 0; color: grey">*</h7>
                         </#if>
                     </div>
                     <div style="width: 40px; display: flex; align-items: center; justify-content: center">
-                        <h7 style="margin-bottom: 0; color: grey">${songInBrowse.serial_number}</h7>
+                        <h7 style="margin-bottom: 0; color: grey">${song.serial_number}</h7>
                     </div>
-                    <div style="width: fit-content; margin: 0; display: flex; align-items: center; justify-content: center">
-                        <h7 style="margin-bottom: 0">${songInBrowse.name}</h7>
+                    <div style="width: 80%; margin: 0; display: flex; justify-content: flex-start">
+                        <div style="display: flex; flex-direction: column; justify-content: center">
+                            <h7 style="margin-bottom: 0">${song.name}</h7>
+                        </div>
+                    </div>
+                    <div style="width: 10%; display: flex; justify-content: flex-end">
+                        <@add.addsong song.song_id song.is_in_library/>
                     </div>
                 </div>
             </div>

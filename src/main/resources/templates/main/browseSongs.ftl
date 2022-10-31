@@ -1,4 +1,6 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/addSond.ftl" as add>
+
 
 <@c.page>
     <hr>
@@ -20,6 +22,11 @@
                         <h6 style="font-size: smaller; margin-bottom: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.name}</h6>
                         <div style="margin:0">
                             <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.artist.nickname}</h7>
+                        </div>
+                    </div>
+                    <div style="width: 30%; display: flex; justify-content: flex-end; margin-bottom: 0">
+                        <div style="display: flex; justify-content: center; flex-direction: column">
+                            <@add.addsong song.song_id song.is_in_library/>
                         </div>
                     </div>
                 </div>

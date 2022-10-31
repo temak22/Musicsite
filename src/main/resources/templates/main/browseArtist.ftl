@@ -1,4 +1,6 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/addSond.ftl" as add>
+
 
 <@c.page>
     <#if artist.page_photo_file??>
@@ -34,6 +36,9 @@
                                     <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>
                                 </div>
                             </div>
+                            <div style="width: 20%; display: flex; justify-content: flex-end">
+                                <@add.addsong song.song_id song.is_in_library/>
+                            </div>
                         </div>
                     </div>
                 <#else>
@@ -55,6 +60,9 @@
                                         <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>
                                     </div>
                                 </div>
+                                <div style="width: 20%; display: flex; justify-content: flex-end">
+                                    <@add.addsong song.song_id song.is_in_library/>
+                                </div>
                             </div>
                         </div>
                     </#list>
@@ -75,6 +83,9 @@
                                     <div class="row" style="margin-left: 0;">
                                         <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.album.name} · ${song.album.release_date?string('yyyy')}</h7>
                                     </div>
+                                </div>
+                                <div style="width: 20%; display: flex; justify-content: flex-end">
+                                    <@add.addsong song.song_id song.is_in_library/>
                                 </div>
                             </div>
                         </div>
@@ -111,4 +122,5 @@
             <h5>No items</h5>
         </#list>
     </div>
+    <br><br>
 </@c.page>

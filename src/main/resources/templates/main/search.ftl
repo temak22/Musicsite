@@ -1,4 +1,6 @@
 <#import "../parts/common.ftl" as c>
+<#import "../parts/addSond.ftl" as add>
+
 
 <@c.page>
     <br>
@@ -86,8 +88,8 @@
             </div>
             <div class="row">
                 <#list songsInBrowse[0..*5] as song>
-                    <div style="margin: 0px; width: 20%; height: 60px">
-                        <div class="row" style="margin: 10px">
+                    <div style="margin: 0px; width: 100%; height: 60px">
+                        <div class="row" style="margin: 10px; width: 100%">
                             <a style="color: crimson" href="/browse/albums/${song.album.album_id}">
                                 <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
                             </a>
@@ -95,6 +97,11 @@
                                 <h6 style="font-size: smaller; margin-bottom: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.name}</h6>
                                 <div style="margin:0">
                                     <h7 style="font-size: smaller; color: grey; margin-bottom: 0; font-weight: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.artist.nickname}</h7>
+                                </div>
+                            </div>
+                            <div style="width: 32%; display: flex; justify-content: flex-end; margin-bottom: 0">
+                                <div style="display: flex; justify-content: center; flex-direction: column">
+                                    <@add.addsong song.song_id song.is_in_library/>
                                 </div>
                             </div>
                         </div>

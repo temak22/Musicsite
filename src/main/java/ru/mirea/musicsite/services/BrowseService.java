@@ -31,6 +31,9 @@ public class BrowseService {
     @Autowired
     private FeatArtistDAO featArtistDAO;
 
+    @Autowired
+    private SongInLibraryDAO songInLibraryDAO;
+
 
     public List<Album> indexAlbum() {
         return albumDAO.index();
@@ -86,4 +89,15 @@ public class BrowseService {
     public Chart showChart(int id) {
         return chartDAO.show(id);
     }
+
+
+    public int addSongInLibrary(SongInLibrary songInLibrary) {
+        return songInLibraryDAO.save(songInLibrary);
+    }
+
+    public boolean isInLibrary(int user_id, int song_id) {
+        SongInLibrary songInLibrary = songInLibraryDAO.show(user_id, song_id);
+        return songInLibrary != null;
+    }
+
 }

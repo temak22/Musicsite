@@ -1,6 +1,7 @@
 package ru.mirea.musicsite.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Artist;
 import ru.mirea.musicsite.entities.Song;
+import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.SearchService;
 import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
 import ru.mirea.musicsite.viewEntity.SongInBrowse;
@@ -26,13 +28,18 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping("")
-    public String searchForm(@RequestParam(required = false, defaultValue = "") String filter,
-                             Model model) {
+    public String searchForm(
+            Authentication auth,
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model) {
+
+        User realUser = (User)auth.getPrincipal();
         List<Artist> artists = new ArrayList<>();
         List<Album> albums = new ArrayList<>();
         ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
         List<Song> songs = new ArrayList<>();
         ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+
 
         if (filter != null && !filter.isEmpty()) {
             artists = searchService.showArtistsByPartName(filter);
@@ -54,8 +61,20 @@ public class SearchController {
             Artist artist = searchService.showArtist(artist_id);
             int song_id = song.getSong_id();
             Album album = searchService.showAlbumBySongId(song_id);
-            songsInBrowse.add(new SongInBrowse(song.getSong_id(), song.getName(), artist, album));
-        }
+            boolean isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+            int is_in_library;
+            if (isInLibrary)
+                is_in_library = 1;
+            else
+                is_in_library = 0;
+
+            songsInBrowse.add(
+                    new SongInBrowse(
+                            song.getSong_id(),
+                            song.getName(),
+                            artist,
+                            album,
+                            is_in_library));        }
 
         model.addAttribute("artists", artists);
         model.addAttribute("albumsInBrowse", albumsInBrowse);
@@ -105,8 +124,12 @@ public class SearchController {
     }
 
     @GetMapping("/filter={filter}/songs")
-    public String searchSongs(@PathVariable String filter,
-                               Model model) {
+    public String searchSongs(
+            Authentication auth,
+            @PathVariable String filter,
+            Model model) {
+
+        User realUser = (User)auth.getPrincipal();
         List<Song> songs = new ArrayList<>();
         ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
 
@@ -122,7 +145,20 @@ public class SearchController {
             Artist artist = searchService.showArtist(artist_id);
             int song_id = song.getSong_id();
             Album album = searchService.showAlbumBySongId(song_id);
-            songsInBrowse.add(new SongInBrowse(song.getSong_id(), song.getName(), artist, album));
+            boolean isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+            int is_in_library;
+            if (isInLibrary)
+                is_in_library = 1;
+            else
+                is_in_library = 0;
+
+            songsInBrowse.add(
+                    new SongInBrowse(
+                            song.getSong_id(),
+                            song.getName(),
+                            artist,
+                            album,
+                            is_in_library));
         }
         model.addAttribute("songsInBrowse", songsInBrowse);
 

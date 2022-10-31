@@ -44,7 +44,7 @@ public class LibraryService {
 
 
     public int countSongInLibraries(int id) {
-        return songInLibraryDAO.countBySongId(id);
+        return songInLibraryDAO.countBySongIdInAllLibraries(id);
     }
 
     public List<SongInLibrary> showSongsInLibraryByUserId(int id) {
