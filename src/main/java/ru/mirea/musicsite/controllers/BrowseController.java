@@ -31,6 +31,8 @@ public class BrowseController {
     @Autowired
     private BrowseService browseService;
 
+    private User realUser;
+
     @GetMapping("")
     public String browse(Map<String, Object> model) {
         List<Album> albums = browseService.indexAlbum();
@@ -70,17 +72,26 @@ public class BrowseController {
             @PathVariable int id,
             Map<String, Object> model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         List<SongInAlbum> songsInAlbum = browseService.showSongsByAlbumId(id);
         ArrayList<SongInAlbumBrowse> songsInBrowse = new ArrayList<>();
 
         for (SongInAlbum songInAlbum : songsInAlbum) {
             int song_id = songInAlbum.getSong_id();
             Song song = browseService.showSong(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -117,7 +128,11 @@ public class BrowseController {
             @PathVariable int id,
             Map<String, Object> model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         List<SongInChart> songsInChart = browseService.showSongsByChartId(id);
         ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
 
@@ -126,10 +141,15 @@ public class BrowseController {
             Song song = browseService.showSong(song_id);
             Artist artist = browseService.showArtist(song.getMain_artist_id());
             Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -154,7 +174,11 @@ public class BrowseController {
             @PathVariable int id,
             Map<String, Object> model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         Artist artist = browseService.showArtist(id);
         model.put("artist", artist);
 
@@ -163,10 +187,15 @@ public class BrowseController {
         for (Song song : songs) {
             int song_id = song.getSong_id();
             Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -182,10 +211,15 @@ public class BrowseController {
             int song_id = feat.getSong_id();
             Song song = browseService.showSong(song_id);
             Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -221,17 +255,26 @@ public class BrowseController {
             @PathVariable int id,
             Map<String, Object> model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         List<Song> songs = browseService.showSongsByArtistId(id);
         ArrayList<SongInArtistBrowse> songsInArtistBrowse = new ArrayList<>();
 
         for (Song song : songs) {
             int song_id = song.getSong_id();
             Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -247,10 +290,15 @@ public class BrowseController {
             int song_id = feat.getSong_id();
             Song song = browseService.showSong(song_id);
             Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -270,10 +318,19 @@ public class BrowseController {
             HttpServletRequest request,
             @RequestParam int song_id,
             Authentication auth,
-            Model model) throws IOException {
+            Model model){
 
-        User realUser = (User)auth.getPrincipal();
-        SongInLibrary songInLibrary = new SongInLibrary(realUser.getUser_id(), song_id);
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
+        SongInLibrary songInLibrary;
+        if (realUser != null)
+            songInLibrary = new SongInLibrary(realUser.getUser_id(), song_id);
+        else
+            songInLibrary = new SongInLibrary(0, song_id);
+
         browseService.addSongInLibrary(songInLibrary);
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;

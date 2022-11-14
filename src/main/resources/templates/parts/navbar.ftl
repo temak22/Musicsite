@@ -40,7 +40,9 @@
 
         <#if name != "unknown">
             <div class="navbar-text" style="margin-right: 10px">${name}</div>
-            <div class="navbar-item"><@l.logout /></div>
+            <div class="navbar-item"><@l.logout_button /></div>
+        <#else>
+            <div class="navbar-item"><@l.login_button /></div>
         </#if>
 
     </div>

@@ -27,13 +27,19 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    private User realUser;
+
     @GetMapping("")
     public String searchForm(
             Authentication auth,
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         List<Artist> artists = new ArrayList<>();
         List<Album> albums = new ArrayList<>();
         ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
@@ -61,10 +67,15 @@ public class SearchController {
             Artist artist = searchService.showArtist(artist_id);
             int song_id = song.getSong_id();
             Album album = searchService.showAlbumBySongId(song_id);
-            boolean isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 
@@ -129,7 +140,11 @@ public class SearchController {
             @PathVariable String filter,
             Model model) {
 
-        User realUser = (User)auth.getPrincipal();
+        if (auth != null)
+            realUser = (User)auth.getPrincipal();
+        else
+            realUser = null;
+
         List<Song> songs = new ArrayList<>();
         ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
 
@@ -145,10 +160,15 @@ public class SearchController {
             Artist artist = searchService.showArtist(artist_id);
             int song_id = song.getSong_id();
             Album album = searchService.showAlbumBySongId(song_id);
-            boolean isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+            boolean isInLibrary;
             int is_in_library;
-            if (isInLibrary)
-                is_in_library = 1;
+            if (realUser != null) {
+                isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
             else
                 is_in_library = 0;
 

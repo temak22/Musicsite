@@ -54,7 +54,7 @@ public class SongInLibraryDAO {
 
     public List<SongInLibrary> showByUserId(int id) {
         return jdbcTemplate.query(
-                "SELECT * FROM Song_in_library INNER JOIN Song ON Song_in_library.Song_id = Song.Song_id WHERE User_id=? ORDER BY Name",
+                "SELECT * FROM Song_in_library_with_name WHERE User_id=? ORDER BY Name",
                 new Object[]{id},
                 new BeanPropertyRowMapper<>(SongInLibrary.class));
     }
