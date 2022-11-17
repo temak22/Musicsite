@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page "null" "" "">
     <div class="row">
         <div style="display: flex; flex-direction: column; width: fit-content; margin-right: 20px">
             <div style="padding: 10px; margin-bottom: 10px; background-color: #cccccc; border: solid grey; width: 100% ">

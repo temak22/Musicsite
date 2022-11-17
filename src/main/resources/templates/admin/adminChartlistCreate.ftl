@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page "null" "" "">
     <hr>
     <div><h4>Create "${chart.name}" (${chart.chart_id}) Chartlist</h4></div>
     <hr>

@@ -7,4 +7,23 @@ body {
     flex-flow: row;
 }
 
+.numberplay .serialNumber {
+    display: block;
+    cursor: pointer;
+    overflow: hidden;}
 
+.numberplay .playButton {
+    display: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.imgplay .albumImg {
+    display: block;
+    cursor: pointer;
+}
+
+.imgplay .playButtonImg {
+    display: none;
+    cursor: pointer;
+}

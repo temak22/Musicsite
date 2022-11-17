@@ -13,4 +13,5 @@ public class Song {
     private int song_id;
     private String name;
     private int main_artist_id;
+    private String song_file;
 }

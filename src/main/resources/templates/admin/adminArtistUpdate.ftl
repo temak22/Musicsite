@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page "null" "" "">
     <hr>
     <div><h4>Update Artist</h4></div>
     <hr>

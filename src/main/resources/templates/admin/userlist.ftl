@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page "null" "" "">
     <h4>User list</h4>
     <br>
     <table class="table">

@@ -38,10 +38,11 @@ public class SongDAO {
     public int save(Song song) {
         int id = count() + 1;
         jdbcTemplate.update(
-                "INSERT INTO Song VALUES (?, ?, ?)",
+                "INSERT INTO Song VALUES (?, ?, ?, ?)",
                 id,
                 song.getName(),
-                song.getMain_artist_id());
+                song.getMain_artist_id(),
+                song.getSong_file());
         return id;
     }
 
@@ -57,9 +58,10 @@ public class SongDAO {
 
     public void update(int id, Song updatedSong) {
         jdbcTemplate.update(
-                "UPDATE Song SET Name=?, Main_artist_id=? WHERE Song_id=?",
+                "UPDATE Song SET Name=?, Main_artist_id=?, Song_file=? WHERE Song_id=?",
                 updatedSong.getName(),
                 updatedSong.getMain_artist_id(),
+                updatedSong.getSong_file(),
                 id);
     }
 

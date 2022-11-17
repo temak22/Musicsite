@@ -284,7 +284,7 @@ public class AdminController {
             }
             song_name.deleteCharAt(song_name.length() - 1);
 
-            Song song = new Song(0, song_name.toString(), artist_id);
+            Song song = new Song(0, song_name.toString(), artist_id, "music");
             int song_id = adminService.saveSong(song);
             song.setSong_id(song_id);
 

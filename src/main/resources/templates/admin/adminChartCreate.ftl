@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page "null" "" "">
     <hr>
     <div><h4>New Chart</h4></div>
     <hr>

@@ -1,7 +1,7 @@
 <#import "../parts/common.ftl" as c>
 <#include "../parts/security.ftl">
 
-<@c.page>
+<@c.page "null" "" "">
     <h4>User editor</h4>
     <hr>
 

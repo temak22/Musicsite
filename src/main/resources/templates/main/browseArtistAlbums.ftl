@@ -1,6 +1,6 @@
 <#import "../parts/common.ftl" as c>
 
-<@c.page>
+<@c.page playing_song_src!"null" playing_song_name!"" playing_song_author!"">
     <div style="display: flex; align-items: center; justify-content: flex-end;">
         <div style="flex: 1">
             <h5>Albums</h5>

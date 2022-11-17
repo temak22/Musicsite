@@ -1,8 +1,9 @@
 <#import "../parts/common.ftl" as c>
 <#import "../parts/addSond.ftl" as add>
+<#import "../parts/playSong.ftl" as play>
 
 
-<@c.page>
+<@c.page playing_song_src!"null" playing_song_name!"" playing_song_author!"">
     <hr>
     <div class="row" style="height: 300px">
         <div style="margin: 10px">
@@ -30,15 +31,22 @@
                             <h7 style="margin-bottom: 0; color: grey">*</h7>
                         </#if>
                     </div>
-                    <div style="width: 40px; display: flex; align-items: center; justify-content: center">
-                        <h7 style="margin-bottom: 0; color: grey">${song.serial_number}</h7>
+                    <div class="numberplay" style="width: 40px; display: flex; align-items: center; justify-content: center">
+                        <div class="serialNumber">
+                            <h7 style="margin-bottom: 0; color: grey">${song.serial_number}</h7>
+                        </div>
+                        <div class="playButton">
+                            <div style="width: fit-content; display: flex; justify-content: flex-start">
+                                <@play.playsong song.song_id "/browse"/>
+                            </div>
+                        </div>
                     </div>
-                    <div style="width: 80%; margin: 0; display: flex; justify-content: flex-start">
+                    <div style="width: 82%; margin: 0; display: flex; justify-content: flex-start">
                         <div style="display: flex; flex-direction: column; justify-content: center">
                             <h7 style="margin-bottom: 0">${song.name}</h7>
                         </div>
                     </div>
-                    <div style="width: 10%; display: flex; justify-content: flex-end">
+                    <div style="width: fit-content; display: flex; justify-content: flex-end">
                         <@add.addsong song.song_id song.is_in_library/>
                     </div>
                 </div>

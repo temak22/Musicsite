@@ -2,12 +2,9 @@ package ru.mirea.musicsite.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import ru.mirea.musicsite.DAO.FeatArtistDAO;
 import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
@@ -16,12 +13,15 @@ import ru.mirea.musicsite.viewEntity.SongInArtistBrowse;
 import ru.mirea.musicsite.viewEntity.SongInAlbumBrowse;
 import ru.mirea.musicsite.viewEntity.SongInBrowse;
 
+import javax.script.*;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
-import java.sql.Date;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -32,9 +32,12 @@ public class BrowseController {
     private BrowseService browseService;
 
     private User realUser;
+    private String playing_song_src;
+    private String playing_song_author;
+    private String playing_song_name;
 
     @GetMapping("")
-    public String browse(Map<String, Object> model) {
+    public String browse(Model model) {
         List<Album> albums = browseService.indexAlbum();
         ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
 
@@ -43,16 +46,19 @@ public class BrowseController {
             Artist artist = browseService.showArtist(artist_id);
             albumsInBrowse.add(new AlbumInBrowse(album, artist));
         }
-        model.put("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("albumsInBrowse", albumsInBrowse);
 
         List<Chart> charts = browseService.indexChart();
-        model.put("charts", charts);
+        model.addAttribute("charts", charts);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browse";
     }
 
     @GetMapping("/albums")
-    public String browseAlbums(Map<String, Object> model) {
+    public String browseAlbums(Model model) {
         List<Album> albums = browseService.indexAlbum();
         ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
 
@@ -61,7 +67,10 @@ public class BrowseController {
             Artist artist = browseService.showArtist(artist_id);
             albumsInBrowse.add(new AlbumInBrowse(album, artist));
         }
-        model.put("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseAlbums";
     }
@@ -70,7 +79,7 @@ public class BrowseController {
     public String albumPage(
             Authentication auth,
             @PathVariable int id,
-            Map<String, Object> model) {
+            Model model) {
 
         if (auth != null)
             realUser = (User)auth.getPrincipal();
@@ -102,22 +111,25 @@ public class BrowseController {
                     songInAlbum.getSerial_number(),
                     is_in_library));
         }
-        model.put("songsInBrowse", songsInBrowse);
+        model.addAttribute("songsInBrowse", songsInBrowse);
 
         Album album = browseService.showAlbum(id);
         int artist_id = album.getArtist_id();
         Artist artist = browseService.showArtist(artist_id);
         AlbumInBrowse albumInBrowse = new AlbumInBrowse(album, artist);
 
-        model.put("albumInBrowse", albumInBrowse);
+        model.addAttribute("albumInBrowse", albumInBrowse);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseAlbum";
     }
 
     @GetMapping("/charts")
-    public String browseCharts(Map<String, Object> model) {
+    public String browseCharts(Model model) {
         List<Chart> charts = browseService.indexChart();
-        model.put("charts", charts);
+        model.addAttribute("charts", charts);
 
         return "main/browseCharts";
     }
@@ -126,7 +138,7 @@ public class BrowseController {
     public String chartPage(
             Authentication auth,
             @PathVariable int id,
-            Map<String, Object> model) {
+            Model model) {
 
         if (auth != null)
             realUser = (User)auth.getPrincipal();
@@ -160,10 +172,13 @@ public class BrowseController {
                     album,
                     is_in_library));
         }
-        model.put("songsInBrowse", songsInBrowse);
+        model.addAttribute("songsInBrowse", songsInBrowse);
 
         Chart chart = browseService.showChart(id);
-        model.put("chart", chart);
+        model.addAttribute("chart", chart);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseChart";
     }
@@ -172,7 +187,7 @@ public class BrowseController {
     public String artistPage(
             Authentication auth,
             @PathVariable int id,
-            Map<String, Object> model) {
+            Model model) {
 
         if (auth != null)
             realUser = (User)auth.getPrincipal();
@@ -180,7 +195,7 @@ public class BrowseController {
             realUser = null;
 
         Artist artist = browseService.showArtist(id);
-        model.put("artist", artist);
+        model.addAttribute("artist", artist);
 
         List<Song> songs = browseService.showSongsByArtistId(id);
         ArrayList<SongInArtistBrowse> songsInArtistBrowse = new ArrayList<>();
@@ -230,10 +245,13 @@ public class BrowseController {
                     is_in_library));
         }
 
-        model.put("songsInArtistBrowse", songsInArtistBrowse);
+        model.addAttribute("songsInArtistBrowse", songsInArtistBrowse);
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);
-        model.put("albums", albums);
+        model.addAttribute("albums", albums);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtist";
     }
@@ -241,10 +259,13 @@ public class BrowseController {
     @GetMapping("/artists/{id}/albums")
     public String artistPageAlbums(
             @PathVariable int id,
-            Map<String, Object> model) {
+            Model model) {
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);
-        model.put("albums", albums);
+        model.addAttribute("albums", albums);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtistAlbums";
     }
@@ -253,7 +274,7 @@ public class BrowseController {
     public String artistPageSongs(
             Authentication auth,
             @PathVariable int id,
-            Map<String, Object> model) {
+            Model model) {
 
         if (auth != null)
             realUser = (User)auth.getPrincipal();
@@ -308,13 +329,16 @@ public class BrowseController {
                     album,
                     is_in_library));
         }
-        model.put("songsInArtistBrowse", songsInArtistBrowse);
+        model.addAttribute("songsInArtistBrowse", songsInArtistBrowse);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtistSongs";
     }
 
     @PostMapping("/addSong")
-    public String addAlbum(
+    public String addSong(
             HttpServletRequest request,
             @RequestParam int song_id,
             Authentication auth,
@@ -332,6 +356,23 @@ public class BrowseController {
             songInLibrary = new SongInLibrary(0, song_id);
 
         browseService.addSongInLibrary(songInLibrary);
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+
+    @PostMapping("/playSong")
+    public String playSong(
+            HttpServletRequest request,
+            @RequestParam int song_id,
+            Model model) throws Exception {
+
+        Song song = browseService.showSong(song_id);
+        playing_song_src = "/static/mp3/" + song.getSong_file();
+        playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
+        playing_song_name = song.getName();
+
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
