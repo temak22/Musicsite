@@ -69,7 +69,7 @@ public class AdminController {
 
         Album album = new Album(0, name, release_date, style, artist_id, null);
 
-        String filename = createFileNameAndSaveFile(file, "/covers");
+        String filename = createFileNameAndSaveFile(file, "/img/covers", ".PNG");
         album.setCover_file(filename);
 
         int album_id = adminService.saveAlbum(album);
@@ -82,7 +82,7 @@ public class AdminController {
         if (!check)
             return "redirect:/admin/createArtist";
         else
-            return "redirect:/admin/createSonglist";
+            return "redirect:/admin/createSong";
     }
 
     @GetMapping("/updateAlbum")
@@ -109,7 +109,7 @@ public class AdminController {
 
         Album album = new Album(album_id, name, release_date, style, artist_id, null);
 
-        String filename = createFileNameAndSaveFile(file, "/covers");
+        String filename = createFileNameAndSaveFile(file, "/img/covers", ".PNG");
         album.setCover_file(filename);
 
         adminService.updateAlbum(album);
@@ -164,7 +164,7 @@ public class AdminController {
 
         Chart chart = new Chart(0, name,null);
 
-        String filename = createFileNameAndSaveFile(file, "/charts");
+        String filename = createFileNameAndSaveFile(file, "/img/charts", ".PNG");
         chart.setCover_file(filename);
 
         int chart_id = adminService.saveChart(chart);
@@ -190,7 +190,7 @@ public class AdminController {
 
         Chart chart = new Chart(chart_id, name,null);
 
-        String filename = createFileNameAndSaveFile(file, "/charts");
+        String filename = createFileNameAndSaveFile(file, "/img/charts", ".PNG");
         chart.setCover_file(filename);
 
         adminService.updateChart(chart);
@@ -239,10 +239,10 @@ public class AdminController {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
 
-        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/avatars");
+        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/img/avatars", ".PNG");
         artist.setAvatar_file(avatarFilename);
 
-        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/pagePhotos");
+        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/img/pagePhotos", ".PNG");
         artist.setPage_photo_file(pagePhotoFilename);
 
         adminService.updateArtist(artist.getArtist_id(), artist);
@@ -307,6 +307,52 @@ public class AdminController {
         return "redirect:/admin/createAlbum";
     }
 
+    @GetMapping("/createSong")
+    public String formSong(Map<String, Object> model) {
+        if (album != null)
+            model.put("album_id", album.getAlbum_id());
+        else
+            model.put("album_id", 0);
+
+        return "admin/adminSongCreate";
+    }
+
+    @PostMapping("/createSong")
+    public String addSong(
+            @RequestParam int album_id,
+            @RequestParam String name,
+            @RequestParam int is_lead_song,
+            @RequestParam int serial_number,
+            @RequestParam String featlist,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam int is_last_song,
+            Map<String, Object> model) throws IOException {
+
+        String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
+        Song song = new Song(0, name, artist_id, songFilename);
+        int song_id = adminService.saveSong(song);
+        song.setSong_id(song_id);
+
+        String[] feats = featlist.split("_");
+        for (String feat : feats) {
+            if (!isParsable(feat))
+                continue;
+            if (!adminService.checkIfArtistExist(Integer.parseInt(feat)))
+                continue;
+            FeatArtist featArtist = new FeatArtist(song_id, Integer.parseInt(feat));
+            adminService.saveFeatArtist(featArtist);
+        }
+
+        SongInAlbum songInAlbum = new SongInAlbum(album_id, song.getSong_id(), is_lead_song, serial_number);
+        adminService.saveSongInAlbum(songInAlbum);
+
+        if (is_last_song == 1)
+            return "redirect:/admin/createAlbum";
+        else
+            return "redirect:/admin/createSong";
+
+    }
+
     @GetMapping("/createChartlist")
     public String formChartlist(Map<String, Object> model) {
         model.put("chart", chart);
@@ -355,10 +401,10 @@ public class AdminController {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
 
-        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/avatars");
+        String avatarFilename = createFileNameAndSaveFile(avatarFile, "/img/avatars", ".PNG");
         artist.setAvatar_file(avatarFilename);
 
-        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/pagePhotos");
+        String pagePhotoFilename = createFileNameAndSaveFile(pageFile, "/img/pagePhotos", ".PNG");
         artist.setPage_photo_file(pagePhotoFilename);
 
         adminService.updateArtist(artist.getArtist_id(), artist);
@@ -420,7 +466,7 @@ public class AdminController {
         }
     }
 
-    private String createFileNameAndSaveFile(MultipartFile file, String folder) throws IOException {
+    private String createFileNameAndSaveFile(MultipartFile file, String folder, String type) throws IOException {
         if (file != null && !file.isEmpty()) {
             File uploadDir = new File(uploadPath + folder);
 
@@ -428,7 +474,7 @@ public class AdminController {
                 uploadDir.mkdir();
 
             String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + ".PNG";
+            String resultFilename = uuidFile + type;
             file.transferTo(new File(uploadPath + folder + "/" + resultFilename));
             return resultFilename;
         }
