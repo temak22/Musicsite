@@ -2,12 +2,12 @@
 
 <@c.page "null" "" "">
     <hr>
-    <div><h4>New Song</h4></div>
+    <div><h4>Update Song</h4></div>
     <hr>
     <br>
     <div>
         <form method="post" enctype="multipart/form-data">
-            <input type="number" name="album_id" value="${album_id!"0"}" readonly>
+            <input type="number" name="song_id" placeholder="Song id" required>
             <input type="text" name="name" placeholder="Song name" required>
             <input type="number" list="number01" max="1" name="is_lead_song" placeholder="Is lead song?" required>
             <datalist id="number01">
@@ -28,12 +28,8 @@
                 <input type="file" name="file" required>
             </div>
             <br>
-            <div style="margin-top: 5px; margin-left: 5px" class="row">
-                <h7 style="margin-right: 10px">Finish</h7>
-                <input type="checkbox" name="is_last_song">
-            </div>
             <input type="hidden" value="${_csrf.token}" name="_csrf">
-            <button type="submit" style="margin-top: 5px">Create</button>
+            <button type="submit" style="margin-top: 5px">Update</button>
         </form>
     </div>
 </@c.page>

@@ -14,4 +14,5 @@ public class SongInAlbum {
     private int song_id;
     private int is_lead_song;
     private int serial_number;
+    private int order_in_album_number;
 }

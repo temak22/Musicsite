@@ -124,15 +124,10 @@ public class AdminController {
             return "redirect:/admin";
         }
 
-        List<SongInAlbum> songsInAlbum = adminService.showSongsByAlbumId(album_id);
-        for (SongInAlbum songInAlbum : songsInAlbum) {
-            adminService.deleteSong(songInAlbum.getSong_id());
-        }
-
         if (!check)
             return "redirect:/admin/createArtist";
 
-        return "redirect:/admin/createSonglist";
+        return "redirect:/admin/createSong";
     }
 
     @GetMapping("/deleteAlbum")
@@ -253,60 +248,6 @@ public class AdminController {
             return "redirect:/admin";
     }
 
-    @GetMapping("/createSonglist")
-    public String formSonglist(Map<String, Object> model) {
-        model.put("main_artist_id", artist_id);
-        model.put("album", album);
-
-        return "admin/adminSonglistCreate";
-    }
-
-    @PostMapping("/createSonglist")
-    public String addSonglist(
-            @RequestParam String songlist,
-            Map<String, Object> model) {
-
-        String[] songs = songlist.split("\r\n");
-        for (String songData : songs) {
-            if (songData.trim().isEmpty())
-                continue;
-
-            String[] data = songData.split(" ");
-            if (data.length < 3)
-                continue;
-            if (!isParsable(data[1]) || !isParsable(data[2]))
-                continue;
-
-            StringBuilder song_name = new StringBuilder();
-            String[] song_name_sep = data[0].split("_");
-            for (String song_name_part : song_name_sep) {
-                song_name.append(song_name_part).append(" ");
-            }
-            song_name.deleteCharAt(song_name.length() - 1);
-
-            Song song = new Song(0, song_name.toString(), artist_id, "music");
-            int song_id = adminService.saveSong(song);
-            song.setSong_id(song_id);
-
-            if (data.length > 3) {
-                String[] feats = data[3].split("_");
-                for (String feat : feats) {
-                    if (!isParsable(feat))
-                        continue;
-                    if (!adminService.checkIfArtistExist(Integer.parseInt(feat)))
-                        continue;
-                    FeatArtist featArtist = new FeatArtist(song_id, Integer.parseInt(feat));
-                    adminService.saveFeatArtist(featArtist);
-                }
-            }
-
-            SongInAlbum songInAlbum = new SongInAlbum(album.getAlbum_id(), song.getSong_id(), Integer.parseInt(data[1]), Integer.parseInt(data[2]));
-            adminService.saveSongInAlbum(songInAlbum);
-        }
-
-        return "redirect:/admin/createAlbum";
-    }
-
     @GetMapping("/createSong")
     public String formSong(Map<String, Object> model) {
         if (album != null)
@@ -323,9 +264,10 @@ public class AdminController {
             @RequestParam String name,
             @RequestParam int is_lead_song,
             @RequestParam int serial_number,
+            @RequestParam int order_number,
             @RequestParam String featlist,
             @RequestParam("file") MultipartFile file,
-            @RequestParam int is_last_song,
+            @RequestParam(required=false) boolean is_last_song,
             Map<String, Object> model) throws IOException {
 
         String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
@@ -343,13 +285,13 @@ public class AdminController {
             adminService.saveFeatArtist(featArtist);
         }
 
-        SongInAlbum songInAlbum = new SongInAlbum(album_id, song.getSong_id(), is_lead_song, serial_number);
+        SongInAlbum songInAlbum = new SongInAlbum(album_id, song.getSong_id(), is_lead_song, serial_number, order_number);
         adminService.saveSongInAlbum(songInAlbum);
 
-        if (is_last_song == 1)
-            return "redirect:/admin/createAlbum";
-        else
+        if (!is_last_song)
             return "redirect:/admin/createSong";
+        else
+            return "redirect:/admin/createAlbum";
 
     }
 
@@ -408,6 +350,45 @@ public class AdminController {
         artist.setPage_photo_file(pagePhotoFilename);
 
         adminService.updateArtist(artist.getArtist_id(), artist);
+
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/updateSong")
+    public String formUpdateSong(Map<String, Object> model) {
+        return "admin/adminSongUpdate";
+    }
+
+    @PostMapping("/updateSong")
+    public String updateSong(
+            @RequestParam int song_id,
+            @RequestParam String name,
+            @RequestParam int is_lead_song,
+            @RequestParam int serial_number,
+            @RequestParam int order_number,
+            @RequestParam String featlist,
+            @RequestParam("file") MultipartFile file,
+            Map<String, Object> model) throws IOException {
+
+        String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
+        int artist_id = adminService.getArtistIdBySongId(song_id);
+        Song song = new Song(song_id, name, artist_id, songFilename);
+        adminService.updateSong(song_id, song);
+
+        adminService.deleteFeatArtists(song_id);
+        String[] feats = featlist.split("_");
+        for (String feat : feats) {
+            if (!isParsable(feat))
+                continue;
+            if (!adminService.checkIfArtistExist(Integer.parseInt(feat)))
+                continue;
+            FeatArtist featArtist = new FeatArtist(song_id, Integer.parseInt(feat));
+            adminService.saveFeatArtist(featArtist);
+        }
+
+        int album_id = adminService.getAlbumIdBySongId(song_id);
+        SongInAlbum songInAlbum = new SongInAlbum(album_id, song.getSong_id(), is_lead_song, serial_number, order_number);
+        adminService.updateSongInAlbum(album_id, song_id, songInAlbum);
 
         return "redirect:/admin";
     }

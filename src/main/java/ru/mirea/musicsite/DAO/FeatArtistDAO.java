@@ -53,4 +53,10 @@ public class FeatArtistDAO {
                 song_id,
                 artist_id);
     }
+
+    public void delete(int song_id) {
+        jdbcTemplate.update(
+                "DELETE FROM Featuring_artist WHERE Song_id=?",
+                song_id);
+    }
 }

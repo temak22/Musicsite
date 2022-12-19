@@ -74,6 +74,10 @@ public class AdminService implements UserDetailsService {
         return featArtistDAO.save(featArtist);
     }
 
+    public void deleteFeatArtists(int song_id) {
+        featArtistDAO.delete(song_id);
+    }
+
 
     public boolean checkIfSongExist(int id) {
         return songDAO.show(id) != null;
@@ -81,6 +85,14 @@ public class AdminService implements UserDetailsService {
 
     public int saveSong(Song song) {
         return songDAO.save(song);
+    }
+
+    public void updateSong(int id, Song song) {
+        songDAO.update(id, song);
+    }
+
+    public int getArtistIdBySongId(int id) {
+        return songDAO.show(id).getMain_artist_id();
     }
 
     public void deleteSong(int id) {
@@ -92,8 +104,16 @@ public class AdminService implements UserDetailsService {
         return songInAlbumDAO.save(songInAlbum);
     }
 
+    public void updateSongInAlbum(int album_id, int song_id, SongInAlbum songInAlbum) {
+        songInAlbumDAO.update(album_id, song_id, songInAlbum);
+    }
+
     public List<SongInAlbum> showSongsByAlbumId(int id) {
         return songInAlbumDAO.showByAlbumId(id);
+    }
+
+    public int getAlbumIdBySongId(int id) {
+        return songInAlbumDAO.showBySongId(id).getAlbum_id();
     }
 
 

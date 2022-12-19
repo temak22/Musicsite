@@ -24,9 +24,7 @@
                     <div class="row" style="margin-inline: 10px">
                         <div class="imgplay" style="width: 40px; display: flex; align-items: center; justify-content: center">
                             <div class="albumImg">
-                                <a style="color: crimson" href="/browse/albums/${song.album.album_id}">
-                                    <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
-                                </a>
+                                <img src="/img/covers/${song.album.cover_file}" height="50" width="50" style="border-radius: 4px;">
                             </div>
                             <div class="playButtonImg" style="height:50px; width:50px">
                                 <div style="width: fit-content; display: flex; justify-content: flex-start">
