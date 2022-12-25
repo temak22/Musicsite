@@ -55,6 +55,54 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return is_active();
+        return isIs_active();
+    }
+
+    public User(int user_id, String username, String password, boolean is_active, Set<Role> roles) {
+        this.user_id = user_id;
+        this.username = username;
+        this.password = password;
+        this.is_active = is_active;
+        this.roles = roles;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
