@@ -104,6 +104,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.mirea.musicsite.MusicsiteApplication</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -114,5 +122,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
