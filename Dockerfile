@@ -6,4 +6,4 @@ RUN mkdir /app
 
 COPY /target/*.jar /app/spring-boot-application.jar
 
-ENTRYPOINT ["java", "-jar", "/app/spring-boot-application.jar"]
+ENTRYPOINT ["java", "-cp", "/app/spring-boot-application.jar", "ru.mirea.musicsite.MusicsiteApplication"]
