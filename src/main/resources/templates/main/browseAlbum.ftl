@@ -7,16 +7,16 @@
     <hr>
     <div class="row" style="height: 300px">
         <div style="margin: 10px">
-            <img src="/img/covers/${albumDto.album.cover_file}" height="280" width="280" style="border-radius: 8px;">
+            <img src="/img/covers/${albumInBrowse.album.cover_file}" height="280" width="280" style="border-radius: 8px;">
         </div>
         <div style="display: flex; height: 60%; flex-direction: column; justify-content: flex-end; margin-left: 20px">
-            <h2 style="margin-bottom: 0">${albumDto.album.name}</h2>
-            <a style="color: crimson; font-size: 22px;" href="/browse/artists/${albumDto.artist.artist_id}">${albumDto.artist.nickname}</a>
+            <h2 style="margin-bottom: 0">${albumInBrowse.album.name}</h2>
+            <a style="color: crimson; font-size: 22px;" href="/browse/artists/${albumInBrowse.artist.artist_id}">${albumInBrowse.artist.nickname}</a>
 
             <div class="row" style="margin-left: 0">
-                <h7 style="margin-bottom: 0; font-weight: inherit;">${albumDto.album.style}</h7>
+                <h7 style="margin-bottom: 0; font-weight: inherit;">${albumInBrowse.album.style}</h7>
                 <h6 style="margin-inline: 4px">.</h6>
-                <h7 style="margin-bottom: 0">${albumDto.album.release_date?string('yyyy')}</h7>
+                <h7 style="margin-bottom: 0">${albumInBrowse.album.release_date?string('yyyy')}</h7>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
         </#list>
     </div>
     <div style="margin-top: 40px; margin-left: 40px; margin-bottom: 20px; display: flex; flex-direction: column">
-        <h7 style="font-size: smaller; color: grey">${albumDto.album.release_date}</h7>
+        <h7 style="font-size: smaller; color: grey">${albumInBrowse.album.release_date}</h7>
         <h7 style="font-size: smaller; color: grey">Songs: ${songsInBrowse?size}</h7>
     </div>
 
