@@ -1,31 +1,13 @@
 package ru.mirea.musicsite.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mirea.musicsite.DAO.*;
+import ru.mirea.musicsite.RepositoriesCollection;
 import ru.mirea.musicsite.entities.*;
 
 import java.util.List;
 
 @Service
-public class SearchService {
-
-    @Autowired
-    private AlbumRepository albumRepository;
-
-    @Autowired
-    private ArtistRepository artistRepository;
-
-    @Autowired
-    private SongRepository songRepository;
-
-    @Autowired
-    private SongInAlbumRepository songInAlbumRepository;
-
-    @Autowired
-    private SongInLibraryRepository songInLibraryRepository;
-
-
+public class SearchService extends RepositoriesCollection {
 
     public Artist showArtist(int id) {
         return artistRepository.show(id);

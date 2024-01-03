@@ -1,6 +1,5 @@
 package ru.mirea.musicsite.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,7 @@ import ru.mirea.musicsite.entities.SongInLibrary;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.services.LibraryService;
-import ru.mirea.musicsite.viewEntity.SongDto;
+import ru.mirea.musicsite.dtos.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -26,15 +25,17 @@ import java.util.List;
 @RequestMapping("/library")
 public class LibraryController {
 
-    @Autowired
-    private LibraryService libraryService;
-
-    @Autowired
-    private BrowseService browseService;
+    private final LibraryService libraryService;
+    private final BrowseService browseService;
 
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
+
+    public LibraryController(LibraryService libraryService, BrowseService browseService) {
+        this.libraryService = libraryService;
+        this.browseService = browseService;
+    }
 
 
     @GetMapping("")

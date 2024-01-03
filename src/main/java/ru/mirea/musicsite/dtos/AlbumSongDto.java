@@ -1,31 +1,28 @@
-package ru.mirea.musicsite.viewEntity;
-
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
+package ru.mirea.musicsite.dtos;
 
 
-public class SongDto {
+public class AlbumSongDto {
 
     private int song_id;
 
     private String name;
 
-    private Artist artist;
+    private int is_lead_song;
 
-    private Album album;
+    private int serial_number;
 
     private int is_in_library;
 
 
-    public SongDto(int song_id, String name, Artist artist, Album album, int is_in_library) {
+    public AlbumSongDto(int song_id, String name, int is_lead_song, int serial_number, int is_in_library) {
         this.song_id = song_id;
         this.name = name;
-        this.artist = artist;
-        this.album = album;
+        this.is_lead_song = is_lead_song;
+        this.serial_number = serial_number;
         this.is_in_library = is_in_library;
     }
 
-    public SongDto() {}
+    public AlbumSongDto() {}
 
     public int getSong_id() {
         return song_id;
@@ -43,20 +40,20 @@ public class SongDto {
         this.name = name;
     }
 
-    public Artist getArtist() {
-        return artist;
+    public int getIs_lead_song() {
+        return is_lead_song;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setIs_lead_song(int is_lead_song) {
+        this.is_lead_song = is_lead_song;
     }
 
-    public Album getAlbum() {
-        return album;
+    public int getSerial_number() {
+        return serial_number;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void setSerial_number(int serial_number) {
+        this.serial_number = serial_number;
     }
 
     public int getIs_in_library() {

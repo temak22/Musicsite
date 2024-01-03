@@ -1,6 +1,5 @@
 package ru.mirea.musicsite.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +10,8 @@ import ru.mirea.musicsite.entities.Song;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.services.SearchService;
-import ru.mirea.musicsite.viewEntity.AlbumDto;
-import ru.mirea.musicsite.viewEntity.SongDto;
+import ru.mirea.musicsite.dtos.AlbumDto;
+import ru.mirea.musicsite.dtos.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -23,16 +22,19 @@ import java.util.List;
 @RequestMapping("/search")
 public class SearchController {
 
-    @Autowired
-    private SearchService searchService;
-
-    @Autowired
-    private BrowseService browseService;
+    private final SearchService searchService;
+    private final BrowseService browseService;
 
     private User realUser;
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
+
+    public SearchController(SearchService searchService, BrowseService browseService) {
+        this.searchService = searchService;
+        this.browseService = browseService;
+    }
+
 
     @GetMapping("")
     public String searchForm(
@@ -49,7 +51,7 @@ public class SearchController {
         List<Album> albums = new ArrayList<>();
         ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songList = new ArrayList<>();
 
 
         if (filter != null && !filter.isEmpty()) {
@@ -67,34 +69,11 @@ public class SearchController {
             albumsInBrowse.add(new AlbumDto(album, artist));
         }
 
-        for (Song song : songs) {
-            int artist_id = song.getMain_artist_id();
-            Artist artist = searchService.showArtist(artist_id);
-            int song_id = song.getSong_id();
-            Album album = searchService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInBrowse.add(
-                    new SongDto(
-                            song.getSong_id(),
-                            song.getName(),
-                            artist,
-                            album,
-                            is_in_library));        }
+        addToSongListResult(songs, songList);
 
         model.addAttribute("artists", artists);
         model.addAttribute("albumsInBrowse", albumsInBrowse);
-        model.addAttribute("songsInBrowse", songsInBrowse);
+        model.addAttribute("songsInBrowse", songList);
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -161,7 +140,7 @@ public class SearchController {
             realUser = null;
 
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songList = new ArrayList<>();
 
         if (filter != null && !filter.isEmpty()) {
             songs = searchService.showSongsByPartName(filter);
@@ -170,11 +149,42 @@ public class SearchController {
         else
             model.addAttribute("filter", null);
 
+        addToSongListResult(songs, songList);
+
+        model.addAttribute("songsInBrowse", songList);
+        model.addAttribute("playing_song_src", playing_song_src);
+        model.addAttribute("playing_song_author", playing_song_author);
+        model.addAttribute("playing_song_name", playing_song_name);
+
+
+        return "main/browseSongs";
+    }
+
+    @PostMapping("/playSong")
+    public String playSong(
+            HttpServletRequest request,
+            @RequestParam int song_id){
+
+        Song song = browseService.showSong(song_id);
+        playing_song_src = "/static/mp3/" + song.getSong_file();
+        playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
+        playing_song_name = song.getName();
+
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+
+    private void addToSongListResult(List<Song> songs, ArrayList<SongDto> songsInBrowse) {
+
         for (Song song : songs) {
             int artist_id = song.getMain_artist_id();
             Artist artist = searchService.showArtist(artist_id);
+
             int song_id = song.getSong_id();
             Album album = searchService.showAlbumBySongId(song_id);
+
             boolean isInLibrary;
             int is_in_library;
             if (realUser != null) {
@@ -193,30 +203,9 @@ public class SearchController {
                             song.getName(),
                             artist,
                             album,
-                            is_in_library));
+                            is_in_library
+                    )
+            );
         }
-        model.addAttribute("songsInBrowse", songsInBrowse);
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
-
-        return "main/browseSongs";
-    }
-
-    @PostMapping("/playSong")
-    public String playSong(
-            HttpServletRequest request,
-            @RequestParam int song_id,
-            Model model){
-
-        Song song = browseService.showSong(song_id);
-        playing_song_src = "/static/mp3/" + song.getSong_file();
-        playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
-        playing_song_name = song.getName();
-
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
     }
 }

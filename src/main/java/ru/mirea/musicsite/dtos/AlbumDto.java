@@ -1,4 +1,4 @@
-package ru.mirea.musicsite.viewEntity;
+package ru.mirea.musicsite.dtos;
 
 import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Artist;

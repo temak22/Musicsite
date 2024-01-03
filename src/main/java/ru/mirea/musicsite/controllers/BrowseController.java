@@ -1,17 +1,16 @@
 package ru.mirea.musicsite.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
-import ru.mirea.musicsite.viewEntity.AlbumDto;
+import ru.mirea.musicsite.dtos.AlbumDto;
 import ru.mirea.musicsite.services.BrowseService;
-import ru.mirea.musicsite.viewEntity.ArtistSongDto;
-import ru.mirea.musicsite.viewEntity.AlbumSongDto;
-import ru.mirea.musicsite.viewEntity.SongDto;
+import ru.mirea.musicsite.dtos.ArtistSongDto;
+import ru.mirea.musicsite.dtos.AlbumSongDto;
+import ru.mirea.musicsite.dtos.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,13 +22,16 @@ import java.util.List;
 @RequestMapping("/browse")
 public class BrowseController {
 
-    @Autowired
-    private BrowseService browseService;
+    private final BrowseService browseService;
 
     private User realUser;
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
+
+    public BrowseController(BrowseService browseService) {
+        this.browseService = browseService;
+    }
 
     @GetMapping("")
     public String browse(Model model) {
@@ -337,8 +339,7 @@ public class BrowseController {
     public String addSong(
             HttpServletRequest request,
             @RequestParam int song_id,
-            Authentication auth,
-            Model model){
+            Authentication auth){
 
         if (auth != null)
             realUser = (User)auth.getPrincipal();
@@ -360,8 +361,7 @@ public class BrowseController {
     @PostMapping("/playSong")
     public String playSong(
             HttpServletRequest request,
-            @RequestParam int song_id,
-            Model model) throws Exception {
+            @RequestParam int song_id) throws Exception {
 
         Song song = browseService.showSong(song_id);
         playing_song_src = "/static/mp3/" + song.getSong_file();
