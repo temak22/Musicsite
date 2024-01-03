@@ -24,7 +24,8 @@ public class BrowseController {
 
     private final BrowseService browseService;
 
-    private User realUser;
+    private User currentUser;
+
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
@@ -33,20 +34,15 @@ public class BrowseController {
         this.browseService = browseService;
     }
 
+
     @GetMapping("")
     public String browse(Model model) {
         List<Album> albums = browseService.indexAlbum();
-        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
-
-        for (Album album : albums) {
-            int artist_id = album.getArtist_id();
-            Artist artist = browseService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumDto(album, artist));
-        }
-        model.addAttribute("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
 
         List<Chart> charts = browseService.indexChart();
         model.addAttribute("charts", charts);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -57,14 +53,7 @@ public class BrowseController {
     @GetMapping("/albums")
     public String browseAlbums(Model model) {
         List<Album> albums = browseService.indexAlbum();
-        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
-
-        for (Album album : albums) {
-            int artist_id = album.getArtist_id();
-            Artist artist = browseService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumDto(album, artist));
-        }
-        model.addAttribute("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
 
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
@@ -74,49 +63,24 @@ public class BrowseController {
     }
 
     @GetMapping("/albums/{id}")
-    public String albumPage(
-            Authentication auth,
-            @PathVariable int id,
-            Model model) {
+    public String albumPage(Authentication auth,
+                            @PathVariable int id,
+                            Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         List<SongInAlbum> songsInAlbum = browseService.showSongsByAlbumId(id);
-        ArrayList<AlbumSongDto> songsInBrowse = new ArrayList<>();
-
-        for (SongInAlbum songInAlbum : songsInAlbum) {
-            int song_id = songInAlbum.getSong_id();
-            Song song = browseService.showSong(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInBrowse.add(new AlbumSongDto(
-                    song_id,
-                    song.getName(),
-                    songInAlbum.getIs_lead_song(),
-                    songInAlbum.getSerial_number(),
-                    is_in_library));
-        }
-        model.addAttribute("songsInBrowse", songsInBrowse);
+        model.addAttribute("songsInBrowse", convertToAlbumSongDtoList(songsInAlbum));
 
         Album album = browseService.showAlbum(id);
-        int artist_id = album.getArtist_id();
-        Artist artist = browseService.showArtist(artist_id);
+        Artist artist = browseService.showArtist(album.getArtist_id());
         AlbumDto albumDto = new AlbumDto(album, artist);
-
         model.addAttribute("albumInBrowse", albumDto);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -133,47 +97,22 @@ public class BrowseController {
     }
 
     @GetMapping("/charts/{id}")
-    public String chartPage(
-            Authentication auth,
-            @PathVariable int id,
-            Model model) {
+    public String chartPage(Authentication auth,
+                            @PathVariable int id,
+                            Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         List<SongInChart> songsInChart = browseService.showSongsByChartId(id);
-        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
-
-        for (SongInChart songInChart : songsInChart) {
-            int song_id = songInChart.getSong_id();
-            Song song = browseService.showSong(song_id);
-            Artist artist = browseService.showArtist(song.getMain_artist_id());
-            Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInBrowse.add(new SongDto(
-                    song_id,
-                    song.getName(),
-                    artist,
-                    album,
-                    is_in_library));
-        }
-        model.addAttribute("songsInBrowse", songsInBrowse);
+        model.addAttribute("songsInBrowse", convertToSongDtoList(songsInChart));
 
         Chart chart = browseService.showChart(id);
         model.addAttribute("chart", chart);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -182,71 +121,26 @@ public class BrowseController {
     }
 
     @GetMapping("/artists/{id}")
-    public String artistPage(
-            Authentication auth,
-            @PathVariable int id,
-            Model model) {
+    public String artistPage(Authentication auth,
+                             @PathVariable int id,
+                             Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         Artist artist = browseService.showArtist(id);
         model.addAttribute("artist", artist);
 
         List<Song> songs = browseService.showSongsByArtistId(id);
-        ArrayList<ArtistSongDto> songsInArtistBrowse = new ArrayList<>();
-        for (Song song : songs) {
-            int song_id = song.getSong_id();
-            Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInArtistBrowse.add(new ArtistSongDto(
-                    song_id,
-                    song.getName(),
-                    album,
-                    is_in_library));
-        }
-
         List<FeatArtist> feats = browseService.showFeatsByArtistId(id);
-        for (FeatArtist feat : feats) {
-            int song_id = feat.getSong_id();
-            Song song = browseService.showSong(song_id);
-            Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInArtistBrowse.add(new ArtistSongDto(
-                    song_id,
-                    song.getName(),
-                    album,
-                    is_in_library));
-        }
-
-        model.addAttribute("songsInArtistBrowse", songsInArtistBrowse);
+        model.addAttribute("songsInArtistBrowse", convertToArtistSongDtoList(songs, feats));
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.addAttribute("albums", albums);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -255,12 +149,12 @@ public class BrowseController {
     }
 
     @GetMapping("/artists/{id}/albums")
-    public String artistPageAlbums(
-            @PathVariable int id,
-            Model model) {
+    public String artistPageAlbums(@PathVariable int id,
+                                   Model model) {
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.addAttribute("albums", albums);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -269,65 +163,20 @@ public class BrowseController {
     }
 
     @GetMapping("/artists/{id}/songs")
-    public String artistPageSongs(
-            Authentication auth,
-            @PathVariable int id,
-            Model model) {
+    public String artistPageSongs(Authentication auth,
+                                  @PathVariable int id,
+                                  Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         List<Song> songs = browseService.showSongsByArtistId(id);
-        ArrayList<ArtistSongDto> songsInArtistBrowse = new ArrayList<>();
-
-        for (Song song : songs) {
-            int song_id = song.getSong_id();
-            Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
-
-            songsInArtistBrowse.add(new ArtistSongDto(
-                    song_id,
-                    song.getName(),
-                    album,
-                    is_in_library));
-        }
-
         List<FeatArtist> feats = browseService.showFeatsByArtistId(id);
-        for (FeatArtist feat : feats) {
-            int song_id = feat.getSong_id();
-            Song song = browseService.showSong(song_id);
-            Album album = browseService.showAlbumBySongId(song_id);
-            boolean isInLibrary;
-            int is_in_library;
-            if (realUser != null) {
-                isInLibrary = browseService.isInLibrary(realUser.getUser_id(), song_id);
-                if (isInLibrary)
-                    is_in_library = 1;
-                else
-                    is_in_library = 0;
-            }
-            else
-                is_in_library = 0;
+        model.addAttribute("songsInArtistBrowse", convertToArtistSongDtoList(songs, feats));
 
-            songsInArtistBrowse.add(new ArtistSongDto(
-                    song_id,
-                    song.getName(),
-                    album,
-                    is_in_library));
-        }
-        model.addAttribute("songsInArtistBrowse", songsInArtistBrowse);
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -336,32 +185,32 @@ public class BrowseController {
     }
 
     @PostMapping("/addSong")
-    public String addSong(
-            HttpServletRequest request,
-            @RequestParam int song_id,
-            Authentication auth){
+    public String addSong(HttpServletRequest request,
+                          Authentication auth,
+                          @RequestParam int song_id) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         SongInLibrary songInLibrary;
-        if (realUser != null)
-            songInLibrary = new SongInLibrary(realUser.getUser_id(), song_id);
+        if (currentUser != null)
+            songInLibrary = new SongInLibrary(currentUser.getUser_id(), song_id);
         else
             songInLibrary = new SongInLibrary(0, song_id);
 
         browseService.addSongInLibrary(songInLibrary);
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
 
 
     @PostMapping("/playSong")
-    public String playSong(
-            HttpServletRequest request,
-            @RequestParam int song_id) throws Exception {
+    public String playSong(HttpServletRequest request,
+                           @RequestParam int song_id) throws Exception {
 
         Song song = browseService.showSong(song_id);
         playing_song_src = "/static/mp3/" + song.getSong_file();
@@ -371,5 +220,132 @@ public class BrowseController {
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
+    }
+
+
+    private ArrayList<ArtistSongDto> convertToArtistSongDtoList(List<Song> songs, List<FeatArtist> feats) {
+        ArrayList<ArtistSongDto> songList = new ArrayList<>();
+
+        for (Song song : songs) {
+            int song_id = song.getSong_id();
+            Album album = browseService.showAlbumBySongId(song_id);
+
+            boolean isInLibrary;
+            int is_in_library;
+            if (currentUser != null) {
+                isInLibrary = browseService.isInLibrary(currentUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
+            else
+                is_in_library = 0;
+
+            songList.add(new ArtistSongDto(
+                    song_id,
+                    song.getName(),
+                    album,
+                    is_in_library));
+        }
+
+        for (FeatArtist feat : feats) {
+            int song_id = feat.getSong_id();
+            Song song = browseService.showSong(song_id);
+            Album album = browseService.showAlbumBySongId(song_id);
+            boolean isInLibrary;
+            int is_in_library;
+            if (currentUser != null) {
+                isInLibrary = browseService.isInLibrary(currentUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
+            else
+                is_in_library = 0;
+
+            songList.add(new ArtistSongDto(
+                    song_id,
+                    song.getName(),
+                    album,
+                    is_in_library));
+        }
+
+        return songList;
+    }
+
+    private ArrayList<SongDto> convertToSongDtoList(List<SongInChart> songsInChart) {
+        ArrayList<SongDto> songList = new ArrayList<>();
+
+        for (SongInChart songInChart : songsInChart) {
+            int song_id = songInChart.getSong_id();
+            Song song = browseService.showSong(song_id);
+
+            Artist artist = browseService.showArtist(song.getMain_artist_id());
+            Album album = browseService.showAlbumBySongId(song_id);
+
+            boolean isInLibrary;
+            int is_in_library;
+            if (currentUser != null) {
+                isInLibrary = browseService.isInLibrary(currentUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
+            else
+                is_in_library = 0;
+
+            songList.add(new SongDto(
+                    song_id,
+                    song.getName(),
+                    artist,
+                    album,
+                    is_in_library));
+        }
+
+        return songList;
+    }
+
+    private ArrayList<AlbumSongDto> convertToAlbumSongDtoList(List<SongInAlbum> songsInAlbum) {
+        ArrayList<AlbumSongDto> songList = new ArrayList<>();
+
+        for (SongInAlbum songInAlbum : songsInAlbum) {
+            int song_id = songInAlbum.getSong_id();
+            Song song = browseService.showSong(song_id);
+            boolean isInLibrary;
+            int is_in_library;
+            if (currentUser != null) {
+                isInLibrary = browseService.isInLibrary(currentUser.getUser_id(), song_id);
+                if (isInLibrary)
+                    is_in_library = 1;
+                else
+                    is_in_library = 0;
+            }
+            else
+                is_in_library = 0;
+
+            songList.add(new AlbumSongDto(
+                    song_id,
+                    song.getName(),
+                    songInAlbum.getIs_lead_song(),
+                    songInAlbum.getSerial_number(),
+                    is_in_library));
+        }
+
+        return songList;
+    }
+
+    private ArrayList<AlbumDto> convertToAlbumDtoList(List<Album> albums) {
+        ArrayList<AlbumDto> albumList = new ArrayList<>();
+
+        for (Album album : albums) {
+            int artist_id = album.getArtist_id();
+            Artist artist = browseService.showArtist(artist_id);
+            albumList.add(new AlbumDto(album, artist));
+        }
+
+        return albumList;
     }
 }

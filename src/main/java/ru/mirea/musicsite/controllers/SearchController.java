@@ -25,7 +25,8 @@ public class SearchController {
     private final SearchService searchService;
     private final BrowseService browseService;
 
-    private User realUser;
+    private User currentUser;
+
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
@@ -37,23 +38,19 @@ public class SearchController {
 
 
     @GetMapping("")
-    public String searchForm(
-            Authentication auth,
-            @RequestParam(required = false, defaultValue = "") String filter,
-            Model model) {
+    public String searchForm(Authentication auth,
+                             @RequestParam(required = false, defaultValue = "") String filter,
+                             Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         List<Artist> artists = new ArrayList<>();
         List<Album> albums = new ArrayList<>();
-        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongDto> songList = new ArrayList<>();
-
-
         if (filter != null && !filter.isEmpty()) {
             artists = searchService.showArtistsByPartName(filter);
             albums = searchService.showAlbumsByPartName(filter);
@@ -63,17 +60,11 @@ public class SearchController {
         else
             model.addAttribute("filter", null);
 
-        for (Album album : albums) {
-            int artist_id = album.getArtist_id();
-            Artist artist = searchService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumDto(album, artist));
-        }
-
-        addToSongListResult(songs, songList);
 
         model.addAttribute("artists", artists);
-        model.addAttribute("albumsInBrowse", albumsInBrowse);
-        model.addAttribute("songsInBrowse", songList);
+        model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
+        model.addAttribute("songsInBrowse", convertToSongDtoList(songs));
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -83,10 +74,9 @@ public class SearchController {
 
     @GetMapping("/filter={filter}/albums")
     public String searchAlbums(@PathVariable String filter,
-                             Model model) {
-        List<Album> albums = new ArrayList<>();
-        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
+                               Model model) {
 
+        List<Album> albums = new ArrayList<>();
         if (filter != null && !filter.isEmpty()) {
             albums = searchService.showAlbumsByPartName(filter);
             model.addAttribute("filter", filter);
@@ -94,12 +84,8 @@ public class SearchController {
         else
             model.addAttribute("filter", null);
 
-        for (Album album : albums) {
-            int artist_id = album.getArtist_id();
-            Artist artist = searchService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumDto(album, artist));
-        }
-        model.addAttribute("albumsInBrowse", albumsInBrowse);
+        model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -109,10 +95,9 @@ public class SearchController {
 
     @GetMapping("/filter={filter}/artists")
     public String searchArtists(@PathVariable String filter,
-                               Model model) {
+                                Model model) {
+
         List<Artist> artists = new ArrayList<>();
-
-
         if (filter != null && !filter.isEmpty()) {
             artists = searchService.showArtistsByPartName(filter);
             model.addAttribute("filter", filter);
@@ -121,6 +106,7 @@ public class SearchController {
             model.addAttribute("filter", null);
 
         model.addAttribute("artists", artists);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -129,19 +115,17 @@ public class SearchController {
     }
 
     @GetMapping("/filter={filter}/songs")
-    public String searchSongs(
-            Authentication auth,
-            @PathVariable String filter,
-            Model model) {
+    public String searchSongs(Authentication auth,
+                              @PathVariable String filter,
+                              Model model) {
 
         if (auth != null)
-            realUser = (User)auth.getPrincipal();
+            currentUser = (User)auth.getPrincipal();
         else
-            realUser = null;
+            currentUser = null;
+
 
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongDto> songList = new ArrayList<>();
-
         if (filter != null && !filter.isEmpty()) {
             songs = searchService.showSongsByPartName(filter);
             model.addAttribute("filter", filter);
@@ -149,21 +133,18 @@ public class SearchController {
         else
             model.addAttribute("filter", null);
 
-        addToSongListResult(songs, songList);
+        model.addAttribute("songsInBrowse", convertToSongDtoList(songs));
 
-        model.addAttribute("songsInBrowse", songList);
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
-
 
         return "main/browseSongs";
     }
 
     @PostMapping("/playSong")
-    public String playSong(
-            HttpServletRequest request,
-            @RequestParam int song_id){
+    public String playSong(HttpServletRequest request,
+                           @RequestParam int song_id) {
 
         Song song = browseService.showSong(song_id);
         playing_song_src = "/static/mp3/" + song.getSong_file();
@@ -176,7 +157,8 @@ public class SearchController {
     }
 
 
-    private void addToSongListResult(List<Song> songs, ArrayList<SongDto> songsInBrowse) {
+    private ArrayList<SongDto> convertToSongDtoList(List<Song> songs) {
+        ArrayList<SongDto> songList = new ArrayList<>();
 
         for (Song song : songs) {
             int artist_id = song.getMain_artist_id();
@@ -187,8 +169,8 @@ public class SearchController {
 
             boolean isInLibrary;
             int is_in_library;
-            if (realUser != null) {
-                isInLibrary = searchService.isInLibrary(realUser.getUser_id(), song_id);
+            if (currentUser != null) {
+                isInLibrary = searchService.isInLibrary(currentUser.getUser_id(), song_id);
                 if (isInLibrary)
                     is_in_library = 1;
                 else
@@ -197,7 +179,7 @@ public class SearchController {
             else
                 is_in_library = 0;
 
-            songsInBrowse.add(
+            songList.add(
                     new SongDto(
                             song.getSong_id(),
                             song.getName(),
@@ -207,5 +189,19 @@ public class SearchController {
                     )
             );
         }
+
+        return songList;
+    }
+
+    private ArrayList<AlbumDto> convertToAlbumDtoList(List<Album> albums) {
+        ArrayList<AlbumDto> albumList = new ArrayList<>();
+
+        for (Album album : albums) {
+            int artist_id = album.getArtist_id();
+            Artist artist = searchService.showArtist(artist_id);
+            albumList.add(new AlbumDto(album, artist));
+        }
+
+        return albumList;
     }
 }

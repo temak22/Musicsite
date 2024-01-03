@@ -18,7 +18,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-        <title>MusicApp</title>
+        <title>Cisum</title>
 
         <style>
             .navbar {
@@ -225,7 +225,7 @@
             options);
 
 
-        // Separate the audio controls so I can style them better.
+        // Separate the audio controls, so I can style them better.
         (() => {
             const elementTop = document.createElement('div');
             // const elementBottom = document.createElement('div');
