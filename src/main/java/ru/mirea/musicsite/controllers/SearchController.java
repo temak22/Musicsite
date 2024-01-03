@@ -11,8 +11,8 @@ import ru.mirea.musicsite.entities.Song;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.services.SearchService;
-import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
-import ru.mirea.musicsite.viewEntity.SongInBrowse;
+import ru.mirea.musicsite.viewEntity.AlbumDto;
+import ru.mirea.musicsite.viewEntity.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ public class SearchController {
 
         List<Artist> artists = new ArrayList<>();
         List<Album> albums = new ArrayList<>();
-        ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
+        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
 
 
         if (filter != null && !filter.isEmpty()) {
@@ -64,7 +64,7 @@ public class SearchController {
         for (Album album : albums) {
             int artist_id = album.getArtist_id();
             Artist artist = searchService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumInBrowse(album, artist));
+            albumsInBrowse.add(new AlbumDto(album, artist));
         }
 
         for (Song song : songs) {
@@ -85,7 +85,7 @@ public class SearchController {
                 is_in_library = 0;
 
             songsInBrowse.add(
-                    new SongInBrowse(
+                    new SongDto(
                             song.getSong_id(),
                             song.getName(),
                             artist,
@@ -106,7 +106,7 @@ public class SearchController {
     public String searchAlbums(@PathVariable String filter,
                              Model model) {
         List<Album> albums = new ArrayList<>();
-        ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
+        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
 
         if (filter != null && !filter.isEmpty()) {
             albums = searchService.showAlbumsByPartName(filter);
@@ -118,7 +118,7 @@ public class SearchController {
         for (Album album : albums) {
             int artist_id = album.getArtist_id();
             Artist artist = searchService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumInBrowse(album, artist));
+            albumsInBrowse.add(new AlbumDto(album, artist));
         }
         model.addAttribute("albumsInBrowse", albumsInBrowse);
         model.addAttribute("playing_song_src", playing_song_src);
@@ -161,7 +161,7 @@ public class SearchController {
             realUser = null;
 
         List<Song> songs = new ArrayList<>();
-        ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
 
         if (filter != null && !filter.isEmpty()) {
             songs = searchService.showSongsByPartName(filter);
@@ -188,7 +188,7 @@ public class SearchController {
                 is_in_library = 0;
 
             songsInBrowse.add(
-                    new SongInBrowse(
+                    new SongDto(
                             song.getSong_id(),
                             song.getName(),
                             artist,

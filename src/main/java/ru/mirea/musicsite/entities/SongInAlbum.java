@@ -1,18 +1,18 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class SongInAlbum {
+
     private int album_id;
+
     private int song_id;
+
     private int is_lead_song;
+
     private int serial_number;
+
     private int order_in_album_number;
+
 
     public SongInAlbum(int album_id, int song_id, int is_lead_song, int serial_number, int order_in_album_number) {
         this.album_id = album_id;
@@ -21,6 +21,8 @@ public class SongInAlbum {
         this.serial_number = serial_number;
         this.order_in_album_number = order_in_album_number;
     }
+
+    public SongInAlbum() {}
 
     public int getAlbum_id() {
         return album_id;

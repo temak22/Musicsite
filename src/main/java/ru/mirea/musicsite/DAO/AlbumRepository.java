@@ -9,12 +9,12 @@ import ru.mirea.musicsite.entities.Album;
 import java.util.List;
 
 @Repository
-public class AlbumDAO {
+public class AlbumRepository {
 
     public final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AlbumDAO(JdbcTemplate jdbcTemplate) {
+    public AlbumRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

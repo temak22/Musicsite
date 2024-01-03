@@ -1,23 +1,25 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class Song {
+
     private int song_id;
+
     private String name;
+
     private int main_artist_id;
+
     private String song_file;
+
 
     public Song(int song_id, String name, int main_artist_id, String song_file) {
         this.song_id = song_id;
         this.name = name;
         this.main_artist_id = main_artist_id;
         this.song_file = song_file;
+    }
+
+    public Song() {
     }
 
     public int getSong_id() {

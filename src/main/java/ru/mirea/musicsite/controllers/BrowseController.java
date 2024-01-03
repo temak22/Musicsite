@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
-import ru.mirea.musicsite.viewEntity.AlbumInBrowse;
+import ru.mirea.musicsite.viewEntity.AlbumDto;
 import ru.mirea.musicsite.services.BrowseService;
-import ru.mirea.musicsite.viewEntity.SongInArtistBrowse;
-import ru.mirea.musicsite.viewEntity.SongInAlbumBrowse;
-import ru.mirea.musicsite.viewEntity.SongInBrowse;
+import ru.mirea.musicsite.viewEntity.ArtistSongDto;
+import ru.mirea.musicsite.viewEntity.AlbumSongDto;
+import ru.mirea.musicsite.viewEntity.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,12 +34,12 @@ public class BrowseController {
     @GetMapping("")
     public String browse(Model model) {
         List<Album> albums = browseService.indexAlbum();
-        ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
+        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
 
         for (Album album : albums) {
             int artist_id = album.getArtist_id();
             Artist artist = browseService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumInBrowse(album, artist));
+            albumsInBrowse.add(new AlbumDto(album, artist));
         }
         model.addAttribute("albumsInBrowse", albumsInBrowse);
 
@@ -55,12 +55,12 @@ public class BrowseController {
     @GetMapping("/albums")
     public String browseAlbums(Model model) {
         List<Album> albums = browseService.indexAlbum();
-        ArrayList<AlbumInBrowse> albumsInBrowse = new ArrayList<>();
+        ArrayList<AlbumDto> albumsInBrowse = new ArrayList<>();
 
         for (Album album : albums) {
             int artist_id = album.getArtist_id();
             Artist artist = browseService.showArtist(artist_id);
-            albumsInBrowse.add(new AlbumInBrowse(album, artist));
+            albumsInBrowse.add(new AlbumDto(album, artist));
         }
         model.addAttribute("albumsInBrowse", albumsInBrowse);
 
@@ -83,7 +83,7 @@ public class BrowseController {
             realUser = null;
 
         List<SongInAlbum> songsInAlbum = browseService.showSongsByAlbumId(id);
-        ArrayList<SongInAlbumBrowse> songsInBrowse = new ArrayList<>();
+        ArrayList<AlbumSongDto> songsInBrowse = new ArrayList<>();
 
         for (SongInAlbum songInAlbum : songsInAlbum) {
             int song_id = songInAlbum.getSong_id();
@@ -100,7 +100,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInBrowse.add(new SongInAlbumBrowse(
+            songsInBrowse.add(new AlbumSongDto(
                     song_id,
                     song.getName(),
                     songInAlbum.getIs_lead_song(),
@@ -112,9 +112,9 @@ public class BrowseController {
         Album album = browseService.showAlbum(id);
         int artist_id = album.getArtist_id();
         Artist artist = browseService.showArtist(artist_id);
-        AlbumInBrowse albumInBrowse = new AlbumInBrowse(album, artist);
+        AlbumDto albumDto = new AlbumDto(album, artist);
 
-        model.addAttribute("albumInBrowse", albumInBrowse);
+        model.addAttribute("albumInBrowse", albumDto);
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
@@ -142,7 +142,7 @@ public class BrowseController {
             realUser = null;
 
         List<SongInChart> songsInChart = browseService.showSongsByChartId(id);
-        ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
 
         for (SongInChart songInChart : songsInChart) {
             int song_id = songInChart.getSong_id();
@@ -161,7 +161,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInBrowse.add(new SongInBrowse(
+            songsInBrowse.add(new SongDto(
                     song_id,
                     song.getName(),
                     artist,
@@ -194,7 +194,7 @@ public class BrowseController {
         model.addAttribute("artist", artist);
 
         List<Song> songs = browseService.showSongsByArtistId(id);
-        ArrayList<SongInArtistBrowse> songsInArtistBrowse = new ArrayList<>();
+        ArrayList<ArtistSongDto> songsInArtistBrowse = new ArrayList<>();
         for (Song song : songs) {
             int song_id = song.getSong_id();
             Album album = browseService.showAlbumBySongId(song_id);
@@ -210,7 +210,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInArtistBrowse.add(new SongInArtistBrowse(
+            songsInArtistBrowse.add(new ArtistSongDto(
                     song_id,
                     song.getName(),
                     album,
@@ -234,7 +234,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInArtistBrowse.add(new SongInArtistBrowse(
+            songsInArtistBrowse.add(new ArtistSongDto(
                     song_id,
                     song.getName(),
                     album,
@@ -278,7 +278,7 @@ public class BrowseController {
             realUser = null;
 
         List<Song> songs = browseService.showSongsByArtistId(id);
-        ArrayList<SongInArtistBrowse> songsInArtistBrowse = new ArrayList<>();
+        ArrayList<ArtistSongDto> songsInArtistBrowse = new ArrayList<>();
 
         for (Song song : songs) {
             int song_id = song.getSong_id();
@@ -295,7 +295,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInArtistBrowse.add(new SongInArtistBrowse(
+            songsInArtistBrowse.add(new ArtistSongDto(
                     song_id,
                     song.getName(),
                     album,
@@ -319,7 +319,7 @@ public class BrowseController {
             else
                 is_in_library = 0;
 
-            songsInArtistBrowse.add(new SongInArtistBrowse(
+            songsInArtistBrowse.add(new ArtistSongDto(
                     song_id,
                     song.getName(),
                     album,

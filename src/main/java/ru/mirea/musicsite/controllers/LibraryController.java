@@ -15,7 +15,7 @@ import ru.mirea.musicsite.entities.SongInLibrary;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.services.LibraryService;
-import ru.mirea.musicsite.viewEntity.SongInBrowse;
+import ru.mirea.musicsite.viewEntity.SongDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class LibraryController {
 
         User realUser = (User)auth.getPrincipal();
         List<SongInLibrary> songsInLibrary = libraryService.showSongsInLibraryByUserId(realUser.getUser_id());
-        ArrayList<SongInBrowse> songsInBrowse = new ArrayList<>();
+        ArrayList<SongDto> songsInBrowse = new ArrayList<>();
 
         for (SongInLibrary songInLibrary : songsInLibrary) {
             int song_id = songInLibrary.getSong_id();
@@ -56,7 +56,7 @@ public class LibraryController {
             int artist_id = song.getMain_artist_id();
             Artist artist = libraryService.showArtist(artist_id);
             Album album = libraryService.showAlbumBySongId(song_id);
-            songsInBrowse.add(new SongInBrowse(song.getSong_id(), song.getName(), artist, album, 1));
+            songsInBrowse.add(new SongDto(song.getSong_id(), song.getName(), artist, album, 1));
         }
 
         model.addAttribute("songsInBrowse", songsInBrowse);

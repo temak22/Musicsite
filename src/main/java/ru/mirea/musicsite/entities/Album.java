@@ -1,22 +1,22 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.sql.Date;
 
-@Setter
-@Getter
-@NoArgsConstructor
+
 public class Album {
 
     private int album_id;
+
     private String name;
+
     private Date release_date;
+
     private String style;
+
     private int artist_id;
+
     private String cover_file;
+
 
     public Album(int album_id, String name, Date release_date, String style, int artist_id, String cover_file) {
         this.album_id = album_id;
@@ -26,6 +26,8 @@ public class Album {
         this.artist_id = artist_id;
         this.cover_file = cover_file;
     }
+
+    public Album() {}
 
     public int getAlbum_id() {
         return album_id;

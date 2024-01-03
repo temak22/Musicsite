@@ -1,22 +1,22 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class Chart {
+
     private int chart_id;
+
     private String name;
+
     private String cover_file;
+
 
     public Chart(int chart_id, String name, String cover_file) {
         this.chart_id = chart_id;
         this.name = name;
         this.cover_file = cover_file;
     }
+
+    public Chart() {}
 
     public int getChart_id() {
         return chart_id;

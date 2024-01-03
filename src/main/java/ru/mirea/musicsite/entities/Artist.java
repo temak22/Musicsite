@@ -1,19 +1,20 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class Artist {
+
     private int artist_id;
+
     private String nickname;
+
     private String email;
+
     private String phone;
+
     private String avatar_file;
+
     private String page_photo_file;
+
 
     public Artist(int artist_id, String nickname, String email, String phone, String avatar_file, String page_photo_file) {
         this.artist_id = artist_id;
@@ -23,6 +24,8 @@ public class Artist {
         this.avatar_file = avatar_file;
         this.page_photo_file = page_photo_file;
     }
+
+    public Artist() {}
 
     public int getArtist_id() {
         return artist_id;

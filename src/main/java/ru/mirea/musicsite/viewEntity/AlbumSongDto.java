@@ -1,31 +1,28 @@
 package ru.mirea.musicsite.viewEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import ru.mirea.musicsite.entities.Artist;
 
-import java.util.List;
+public class AlbumSongDto {
 
-
-@Setter
-@Getter
-@NoArgsConstructor
-public class SongInAlbumBrowse {
     private int song_id;
+
     private String name;
+
     private int is_lead_song;
+
     private int serial_number;
+
     private int is_in_library;
 
-    public SongInAlbumBrowse(int song_id, String name, int is_lead_song, int serial_number, int is_in_library) {
+
+    public AlbumSongDto(int song_id, String name, int is_lead_song, int serial_number, int is_in_library) {
         this.song_id = song_id;
         this.name = name;
         this.is_lead_song = is_lead_song;
         this.serial_number = serial_number;
         this.is_in_library = is_in_library;
     }
+
+    public AlbumSongDto() {}
 
     public int getSong_id() {
         return song_id;

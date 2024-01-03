@@ -11,92 +11,92 @@ import java.util.List;
 public class BrowseService {
 
     @Autowired
-    private AlbumDAO albumDAO;
+    private AlbumRepository albumRepository;
 
     @Autowired
-    private ArtistDAO artistDAO;
+    private ArtistRepository artistRepository;
 
     @Autowired
-    private SongDAO songDAO;
+    private SongRepository songRepository;
 
     @Autowired
-    private SongInAlbumDAO songInAlbumDAO;
+    private SongInAlbumRepository songInAlbumRepository;
 
     @Autowired
-    private ChartDAO chartDAO;
+    private ChartRepository chartRepository;
 
     @Autowired
-    private SongInChartDAO songInChartDAO;
+    private SongInChartRepository songInChartRepository;
 
     @Autowired
-    private FeatArtistDAO featArtistDAO;
+    private FeatArtistRepository featArtistRepository;
 
     @Autowired
-    private SongInLibraryDAO songInLibraryDAO;
+    private SongInLibraryRepository songInLibraryRepository;
 
 
     public List<Album> indexAlbum() {
-        return albumDAO.index();
+        return albumRepository.index();
     }
 
     public Album showAlbum(int id) {
-        return albumDAO.show(id);
+        return albumRepository.show(id);
     }
 
     public List<Album> showAlbumsByArtistId(int id) {
-        return albumDAO.showByArtistId(id);
+        return albumRepository.showByArtistId(id);
     }
 
     public Album showAlbumBySongId(int id) {
-        SongInAlbum songInAlbum = songInAlbumDAO.showBySongId(id);
-        return albumDAO.show(songInAlbum.getAlbum_id());
+        SongInAlbum songInAlbum = songInAlbumRepository.showBySongId(id);
+        return albumRepository.show(songInAlbum.getAlbum_id());
     }
 
 
     public Artist showArtist(int id) {
-        return artistDAO.show(id);
+        return artistRepository.show(id);
     }
 
 
     public List<FeatArtist> showFeatsByArtistId(int id) {
-        return featArtistDAO.showByArtistId(id);
+        return featArtistRepository.showByArtistId(id);
     }
 
 
     public Song showSong(int id) {
-        return songDAO.show(id);
+        return songRepository.show(id);
     }
 
     public List<Song> showSongsByArtistId(int id) {
-        return songDAO.showByArtistId(id);
+        return songRepository.showByArtistId(id);
     }
 
 
     public List<SongInAlbum> showSongsByAlbumId(int id) {
-        return songInAlbumDAO.showByAlbumId(id);
+        return songInAlbumRepository.showByAlbumId(id);
     }
 
 
     public List<SongInChart> showSongsByChartId(int id) {
-        return songInChartDAO.showByChartId(id);
+        return songInChartRepository.showByChartId(id);
     }
 
 
     public List<Chart> indexChart() {
-        return chartDAO.index();
+        return chartRepository.index();
     }
 
     public Chart showChart(int id) {
-        return chartDAO.show(id);
+        return chartRepository.show(id);
     }
 
 
     public int addSongInLibrary(SongInLibrary songInLibrary) {
-        return songInLibraryDAO.save(songInLibrary);
+        return songInLibraryRepository.save(songInLibrary);
     }
 
     public boolean isInLibrary(int user_id, int song_id) {
-        SongInLibrary songInLibrary = songInLibraryDAO.show(user_id, song_id);
+        SongInLibrary songInLibrary = songInLibraryRepository.show(user_id, song_id);
         return songInLibrary != null;
     }
 

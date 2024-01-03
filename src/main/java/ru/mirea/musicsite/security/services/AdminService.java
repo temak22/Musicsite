@@ -16,134 +16,134 @@ import java.util.List;
 public class AdminService implements UserDetailsService {
 
     @Autowired
-    private AlbumDAO albumDAO;
+    private AlbumRepository albumRepository;
 
     @Autowired
-    private ArtistDAO artistDAO;
+    private ArtistRepository artistRepository;
 
     @Autowired
-    private SongDAO songDAO;
+    private SongRepository songRepository;
 
     @Autowired
-    private SongInAlbumDAO songInAlbumDAO;
+    private SongInAlbumRepository songInAlbumRepository;
 
     @Autowired
-    private ChartDAO chartDAO;
+    private ChartRepository chartRepository;
 
     @Autowired
-    private SongInChartDAO songInChartDAO;
+    private SongInChartRepository songInChartRepository;
 
     @Autowired
-    private FeatArtistDAO featArtistDAO;
+    private FeatArtistRepository featArtistRepository;
 
     @Autowired
     private UserRepo userRepo;
 
 
     public List<Album> indexAlbum() {
-        return albumDAO.index();
+        return albumRepository.index();
     }
 
     public int saveAlbum(Album album) {
-        return albumDAO.save(album);
+        return albumRepository.save(album);
     }
 
     public void updateAlbum(Album album) {
-        albumDAO.update(album.getAlbum_id(), album);
+        albumRepository.update(album.getAlbum_id(), album);
     }
 
     public void deleteAlbum(int id) {
-        albumDAO.delete(id);
+        albumRepository.delete(id);
     }
 
 
     public boolean checkIfArtistExist(int id) {
-        return artistDAO.show(id) != null;
+        return artistRepository.show(id) != null;
     }
 
     public int saveArtist(Artist artist) {
-        return artistDAO.save(artist);
+        return artistRepository.save(artist);
     }
 
     public void updateArtist(int id, Artist artist) {
-        artistDAO.update(id, artist);
+        artistRepository.update(id, artist);
     }
 
 
     public int saveFeatArtist(FeatArtist featArtist) {
-        return featArtistDAO.save(featArtist);
+        return featArtistRepository.save(featArtist);
     }
 
     public void deleteFeatArtists(int song_id) {
-        featArtistDAO.delete(song_id);
+        featArtistRepository.delete(song_id);
     }
 
 
     public boolean checkIfSongExist(int id) {
-        return songDAO.show(id) != null;
+        return songRepository.show(id) != null;
     }
 
     public int saveSong(Song song) {
-        return songDAO.save(song);
+        return songRepository.save(song);
     }
 
     public void updateSong(int id, Song song) {
-        songDAO.update(id, song);
+        songRepository.update(id, song);
     }
 
     public int getArtistIdBySongId(int id) {
-        return songDAO.show(id).getMain_artist_id();
+        return songRepository.show(id).getMain_artist_id();
     }
 
     public void deleteSong(int id) {
-        songDAO.delete(id);
+        songRepository.delete(id);
     }
 
 
     public int saveSongInAlbum(SongInAlbum songInAlbum) {
-        return songInAlbumDAO.save(songInAlbum);
+        return songInAlbumRepository.save(songInAlbum);
     }
 
     public void updateSongInAlbum(int album_id, int song_id, SongInAlbum songInAlbum) {
-        songInAlbumDAO.update(album_id, song_id, songInAlbum);
+        songInAlbumRepository.update(album_id, song_id, songInAlbum);
     }
 
     public List<SongInAlbum> showSongsByAlbumId(int id) {
-        return songInAlbumDAO.showByAlbumId(id);
+        return songInAlbumRepository.showByAlbumId(id);
     }
 
     public int getAlbumIdBySongId(int id) {
-        return songInAlbumDAO.showBySongId(id).getAlbum_id();
+        return songInAlbumRepository.showBySongId(id).getAlbum_id();
     }
 
 
     public int saveSongInChart(SongInChart songInChart) {
-        return songInChartDAO.save(songInChart);
+        return songInChartRepository.save(songInChart);
     }
 
     public void deleteSongInChart(int chart_id, int song_id) {
-        songInChartDAO.delete(chart_id, song_id);
+        songInChartRepository.delete(chart_id, song_id);
     }
 
     public List<SongInChart> showSongsByChartId(int id) {
-        return songInChartDAO.showByChartId(id);
+        return songInChartRepository.showByChartId(id);
     }
 
 
     public List<Chart> indexChart() {
-        return chartDAO.index();
+        return chartRepository.index();
     }
 
     public int saveChart(Chart chart) {
-        return chartDAO.save(chart);
+        return chartRepository.save(chart);
     }
 
     public void updateChart(Chart chart) {
-        chartDAO.update(chart.getChart_id(), chart);
+        chartRepository.update(chart.getChart_id(), chart);
     }
 
     public void deleteChart(int id) {
-        chartDAO.delete(id);
+        chartRepository.delete(id);
     }
 
 

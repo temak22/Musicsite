@@ -11,52 +11,52 @@ import java.util.List;
 public class SearchService {
 
     @Autowired
-    private AlbumDAO albumDAO;
+    private AlbumRepository albumRepository;
 
     @Autowired
-    private ArtistDAO artistDAO;
+    private ArtistRepository artistRepository;
 
     @Autowired
-    private SongDAO songDAO;
+    private SongRepository songRepository;
 
     @Autowired
-    private SongInAlbumDAO songInAlbumDAO;
+    private SongInAlbumRepository songInAlbumRepository;
 
     @Autowired
-    private SongInLibraryDAO songInLibraryDAO;
+    private SongInLibraryRepository songInLibraryRepository;
 
 
 
     public Artist showArtist(int id) {
-        return artistDAO.show(id);
+        return artistRepository.show(id);
     }
 
     public List<Artist> showArtistsByPartName(String partname) {
-        return artistDAO.showByPartName(partname + "%", "% " + partname + "%");
+        return artistRepository.showByPartName(partname + "%", "% " + partname + "%");
     }
 
 
     public Album showAlbumBySongId(int id) {
-        SongInAlbum songInAlbum = songInAlbumDAO.showBySongId(id);
-        return albumDAO.show(songInAlbum.getAlbum_id());
+        SongInAlbum songInAlbum = songInAlbumRepository.showBySongId(id);
+        return albumRepository.show(songInAlbum.getAlbum_id());
     }
 
     public List<Album> showAlbumsByPartName(String partname) {
-        return albumDAO.showByPartName(partname + "%", "% " + partname + "%");
+        return albumRepository.showByPartName(partname + "%", "% " + partname + "%");
     }
 
 
     public List<Song> showSongsByPartName(String partname) {
-        return songDAO.showByPartName(partname + "%", "% " + partname + "%");
+        return songRepository.showByPartName(partname + "%", "% " + partname + "%");
     }
 
 
     public int addSongInLibrary(SongInLibrary songInLibrary) {
-        return songInLibraryDAO.save(songInLibrary);
+        return songInLibraryRepository.save(songInLibrary);
     }
 
     public boolean isInLibrary(int user_id, int song_id) {
-        SongInLibrary songInLibrary = songInLibraryDAO.show(user_id, song_id);
+        SongInLibrary songInLibrary = songInLibraryRepository.show(user_id, song_id);
         return songInLibrary != null;
     }
 }

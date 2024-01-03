@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.mirea.musicsite.entities.SongInAlbum;
 import ru.mirea.musicsite.entities.SongInChart;
 
 import java.util.List;
 
 @Repository
-public class SongInChartDAO {
+public class SongInChartRepository {
 
     public final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public SongInChartDAO(JdbcTemplate jdbcTemplate) {
+    public SongInChartRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

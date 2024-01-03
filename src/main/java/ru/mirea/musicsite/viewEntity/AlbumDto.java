@@ -1,24 +1,22 @@
 package ru.mirea.musicsite.viewEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Artist;
 
 
-@Setter
-@Getter
-@NoArgsConstructor
-public class AlbumInBrowse {
+public class AlbumDto {
+
     private Album album;
+
     private Artist artist;
 
-    public AlbumInBrowse(Album album, Artist artist) {
+
+    public AlbumDto(Album album, Artist artist) {
         this.album = album;
         this.artist = artist;
     }
+
+    public AlbumDto() {}
 
     public Album getAlbum() {
         return album;

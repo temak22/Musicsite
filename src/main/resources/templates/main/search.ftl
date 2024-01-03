@@ -58,17 +58,17 @@
                 <hr>
             </div>
             <div class="row">
-                <#list albumsInBrowse[0..*5] as albumInBrowse>
+                <#list albumsInBrowse[0..*5] as albumDto>
                     <div style="margin: 0px;">
                         <div style="margin: 10px">
-                            <a href="/browse/albums/${albumInBrowse.album.album_id}">
-                                <img src="/img/covers/${albumInBrowse.album.cover_file}" height="190" width="190" style="border-radius: 8px;">
+                            <a href="/browse/albums/${albumDto.album.album_id}">
+                                <img src="/img/covers/${albumDto.album.cover_file}" height="190" width="190" style="border-radius: 8px;">
                             </a>
                         </div>
                         <div style="width: 200px;margin: 10px;">
-                            <h6 style="font-size: smaller; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${albumInBrowse.album.name}</h6>
-                            <a href="/browse/artists/${albumInBrowse.artist.artist_id}" style="text-decoration-color: grey">
-                                <h6 style="font-size: small; color: grey; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${albumInBrowse.artist.nickname}</h6>
+                            <h6 style="font-size: smaller; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${albumDto.album.name}</h6>
+                            <a href="/browse/artists/${albumDto.artist.artist_id}" style="text-decoration-color: grey">
+                                <h6 style="font-size: small; color: grey; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${albumDto.artist.nickname}</h6>
                             </a>
                         </div>
                     </div>

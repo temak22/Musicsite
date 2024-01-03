@@ -1,7 +1,6 @@
 package ru.mirea.musicsite.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import ru.mirea.musicsite.DAO.*;
 import ru.mirea.musicsite.entities.*;
@@ -12,42 +11,42 @@ import java.util.List;
 public class LibraryService {
 
     @Autowired
-    private AlbumDAO albumDAO;
+    private AlbumRepository albumRepository;
 
     @Autowired
-    private ArtistDAO artistDAO;
+    private ArtistRepository artistRepository;
 
     @Autowired
-    private SongDAO songDAO;
+    private SongRepository songRepository;
 
     @Autowired
-    private SongInAlbumDAO songInAlbumDAO;
+    private SongInAlbumRepository songInAlbumRepository;
 
     @Autowired
-    private SongInLibraryDAO songInLibraryDAO;
+    private SongInLibraryRepository songInLibraryRepository;
 
 
     public Artist showArtist(int id) {
-        return artistDAO.show(id);
+        return artistRepository.show(id);
     }
 
 
     public Song showSong(int id) {
-        return songDAO.show(id);
+        return songRepository.show(id);
     }
 
 
     public Album showAlbumBySongId(int id) {
-        SongInAlbum songInAlbum = songInAlbumDAO.showBySongId(id);
-        return albumDAO.show(songInAlbum.getAlbum_id());
+        SongInAlbum songInAlbum = songInAlbumRepository.showBySongId(id);
+        return albumRepository.show(songInAlbum.getAlbum_id());
     }
 
 
     public int countSongInLibraries(int id) {
-        return songInLibraryDAO.countBySongIdInAllLibraries(id);
+        return songInLibraryRepository.countBySongIdInAllLibraries(id);
     }
 
     public List<SongInLibrary> showSongsInLibraryByUserId(int id) {
-        return songInLibraryDAO.showByUserId(id);
+        return songInLibraryRepository.showByUserId(id);
     }
 }

@@ -1,20 +1,19 @@
 package ru.mirea.musicsite.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class FeatArtist {
+
     private int song_id;
+
     private int feat_artist_id;
+
 
     public FeatArtist(int song_id, int feat_artist_id) {
         this.song_id = song_id;
         this.feat_artist_id = feat_artist_id;
     }
+
+    public FeatArtist() {}
 
     public int getSong_id() {
         return song_id;

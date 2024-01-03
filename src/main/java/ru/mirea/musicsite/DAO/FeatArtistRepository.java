@@ -5,18 +5,16 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.mirea.musicsite.entities.FeatArtist;
-import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
 
 import java.util.List;
 
 @Repository
-public class FeatArtistDAO {
+public class FeatArtistRepository {
 
     public final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public FeatArtistDAO(JdbcTemplate jdbcTemplate) {
+    public FeatArtistRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
