@@ -63,6 +63,7 @@ public class BrowseController {
             albumsInBrowse.add(new AlbumInBrowse(album, artist));
         }
         model.addAttribute("albumsInBrowse", albumsInBrowse);
+
         model.addAttribute("playing_song_src", playing_song_src);
         model.addAttribute("playing_song_author", playing_song_author);
         model.addAttribute("playing_song_name", playing_song_name);
