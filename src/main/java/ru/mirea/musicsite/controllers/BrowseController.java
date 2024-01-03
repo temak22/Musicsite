@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.dtos.AlbumDto;
@@ -26,10 +27,6 @@ public class BrowseController {
 
     private User currentUser;
 
-    private String playing_song_src;
-    private String playing_song_author;
-    private String playing_song_name;
-
     public BrowseController(BrowseService browseService) {
         this.browseService = browseService;
     }
@@ -43,10 +40,6 @@ public class BrowseController {
         List<Chart> charts = browseService.indexChart();
         model.addAttribute("charts", charts);
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/browse";
     }
 
@@ -54,10 +47,6 @@ public class BrowseController {
     public String browseAlbums(Model model) {
         List<Album> albums = browseService.indexAlbum();
         model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
-
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseAlbums";
     }
@@ -80,10 +69,6 @@ public class BrowseController {
         Artist artist = browseService.showArtist(album.getArtist_id());
         AlbumDto albumDto = new AlbumDto(album, artist);
         model.addAttribute("albumInBrowse", albumDto);
-
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseAlbum";
     }
@@ -113,10 +98,6 @@ public class BrowseController {
         Chart chart = browseService.showChart(id);
         model.addAttribute("chart", chart);
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/browseChart";
     }
 
@@ -141,10 +122,6 @@ public class BrowseController {
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.addAttribute("albums", albums);
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/browseArtist";
     }
 
@@ -154,10 +131,6 @@ public class BrowseController {
 
         List<Album> albums = browseService.showAlbumsByArtistId(id);
         model.addAttribute("albums", albums);
-
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtistAlbums";
     }
@@ -176,10 +149,6 @@ public class BrowseController {
         List<Song> songs = browseService.showSongsByArtistId(id);
         List<FeatArtist> feats = browseService.showFeatsByArtistId(id);
         model.addAttribute("songsInArtistBrowse", convertToArtistSongDtoList(songs, feats));
-
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtistSongs";
     }
@@ -202,21 +171,6 @@ public class BrowseController {
             songInLibrary = new SongInLibrary(0, song_id);
 
         browseService.addSongInLibrary(songInLibrary);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
-
-
-    @PostMapping("/playSong")
-    public String playSong(HttpServletRequest request,
-                           @RequestParam int song_id) throws Exception {
-
-        Song song = browseService.showSong(song_id);
-        playing_song_src = "/static/mp3/" + song.getSong_file();
-        playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
-        playing_song_name = song.getName();
-
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;

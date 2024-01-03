@@ -1,8 +1,6 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSond.ftl" as add>
+<#import "../parts/addSong.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
-
-
 
 <@c.page playing_song_src!"null" playing_song_name!"" playing_song_author!"">
     <hr>
@@ -23,7 +21,7 @@
                         </div>
                         <div class="playButtonImg" style="height:50px; width:50px">
                             <div style="width: fit-content; display: flex; justify-content: flex-start">
-                                <@play.playsong song.song_id "/search"/>
+                                <@play.playsong song.song_id/>
                             </div>
                         </div>
                     </div>

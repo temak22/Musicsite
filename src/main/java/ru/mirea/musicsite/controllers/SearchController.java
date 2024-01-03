@@ -27,10 +27,6 @@ public class SearchController {
 
     private User currentUser;
 
-    private String playing_song_src;
-    private String playing_song_author;
-    private String playing_song_name;
-
     public SearchController(SearchService searchService, BrowseService browseService) {
         this.searchService = searchService;
         this.browseService = browseService;
@@ -65,10 +61,6 @@ public class SearchController {
         model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
         model.addAttribute("songsInBrowse", convertToSongDtoList(songs));
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/search";
     }
 
@@ -86,10 +78,6 @@ public class SearchController {
 
         model.addAttribute("albumsInBrowse", convertToAlbumDtoList(albums));
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/browseAlbums";
     }
 
@@ -106,10 +94,6 @@ public class SearchController {
             model.addAttribute("filter", null);
 
         model.addAttribute("artists", artists);
-
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
 
         return "main/browseArtists";
     }
@@ -135,25 +119,7 @@ public class SearchController {
 
         model.addAttribute("songsInBrowse", convertToSongDtoList(songs));
 
-        model.addAttribute("playing_song_src", playing_song_src);
-        model.addAttribute("playing_song_author", playing_song_author);
-        model.addAttribute("playing_song_name", playing_song_name);
-
         return "main/browseSongs";
-    }
-
-    @PostMapping("/playSong")
-    public String playSong(HttpServletRequest request,
-                           @RequestParam int song_id) {
-
-        Song song = browseService.showSong(song_id);
-        playing_song_src = "/static/mp3/" + song.getSong_file();
-        playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
-        playing_song_name = song.getName();
-
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
     }
 
 

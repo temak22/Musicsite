@@ -1,5 +1,5 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSond.ftl" as add>
+<#import "../parts/addSong.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
 
 
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="playButtonImg" style="height:50px; width:50px">
                                     <div style="width: fit-content; display: flex; justify-content: flex-start">
-                                        <@play.playsong song.song_id "/browse"/>
+                                        <@play.playsong song.song_id/>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="playButtonImg" style="height:50px; width:50px">
                                         <div style="width: fit-content; display: flex; justify-content: flex-start">
-                                            <@play.playsong song.song_id "/browse"/>
+                                            <@play.playsong song.song_id/>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="playButtonImg" style="height:50px; width:50px">
                                         <div style="width: fit-content; display: flex; justify-content: flex-start">
-                                            <@play.playsong song.song_id "/browse"/>
+                                            <@play.playsong song.song_id/>
                                         </div>
                                     </div>
                                 </div>

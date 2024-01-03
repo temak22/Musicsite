@@ -1,5 +1,5 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSond.ftl" as add>
+<#import "../parts/addSong.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
 
 
@@ -37,7 +37,7 @@
                         </div>
                         <div class="playButton">
                             <div style="width: fit-content; display: flex; justify-content: flex-start">
-                                <@play.playsong song.song_id "/browse"/>
+                                <@play.playsong song.song_id/>
                             </div>
                         </div>
                     </div>
