@@ -35,13 +35,16 @@ public class AdminController {
     private Chart chart;
     private boolean edit_songs;
 
+
     @GetMapping("")
-    public String home(Map<String, Object> model) {
-            return "admin/admin";
+    public String home() {
+
+        return "admin/admin";
     }
 
     @GetMapping("/createAlbum")
     public String formAlbum(Map<String, Object> model) {
+
         Iterable<Album> albums = adminService.indexAlbum();
         model.put("albums", albums);
         return "admin/adminAlbumCreate";
@@ -49,17 +52,16 @@ public class AdminController {
 
     @GetMapping("/")
     public String homeRedirect() {
+
         return "redirect:/admin";
     }
 
     @PostMapping("/createAlbum")
-    public String addAlbum(
-            @RequestParam String name,
-            @RequestParam Date release_date,
-            @RequestParam String style,
-            @RequestParam int artist_id,
-            @RequestParam("file") MultipartFile file,
-            Map<String, Object> model) throws IOException {
+    public String addAlbum(@RequestParam String name,
+                           @RequestParam Date release_date,
+                           @RequestParam String style,
+                           @RequestParam int artist_id,
+                           @RequestParam("file") MultipartFile file) throws IOException {
 
         boolean check = adminService.checkIfArtistExist(artist_id);
         if (!check) {
@@ -86,20 +88,19 @@ public class AdminController {
     }
 
     @GetMapping("/updateAlbum")
-    public String formUpdateAlbum(Map<String, Object> model) {
+    public String formUpdateAlbum() {
+
         return "admin/adminAlbumUpdate";
     }
 
     @PostMapping("/updateAlbum")
-    public String updateAlbum(
-            @RequestParam int album_id,
-            @RequestParam String name,
-            @RequestParam Date release_date,
-            @RequestParam String style,
-            @RequestParam int artist_id,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(required=false) boolean edit_songs,
-            Map<String, Object> model) throws IOException {
+    public String updateAlbum(@RequestParam int album_id,
+                              @RequestParam String name,
+                              @RequestParam Date release_date,
+                              @RequestParam String style,
+                              @RequestParam int artist_id,
+                              @RequestParam("file") MultipartFile file,
+                              @RequestParam(required=false) boolean edit_songs) throws IOException {
 
         boolean check = adminService.checkIfArtistExist(artist_id);
         if (!check) {
@@ -131,14 +132,13 @@ public class AdminController {
     }
 
     @GetMapping("/deleteAlbum")
-    public String formDeleteAlbum(Map<String, Object> model) {
+    public String formDeleteAlbum() {
+
         return "admin/adminAlbumDelete";
     }
 
     @PostMapping("/deleteAlbum")
-    public String deleteAlbum(
-            @RequestParam int album_id,
-            Map<String, Object> model) throws IOException {
+    public String deleteAlbum(@RequestParam int album_id) {
 
         adminService.deleteAlbum(album_id);
         return "redirect:/admin";
@@ -146,16 +146,15 @@ public class AdminController {
 
     @GetMapping("/createChart")
     public String formChart(Map<String, Object> model) {
+
         Iterable<Chart> charts = adminService.indexChart();
         model.put("charts", charts);
         return "admin/adminChartCreate";
     }
 
     @PostMapping("/createChart")
-    public String addChart(
-            @RequestParam String name,
-            @RequestParam("file") MultipartFile file,
-            Map<String, Object> model) throws IOException {
+    public String addChart(@RequestParam String name,
+                           @RequestParam("file") MultipartFile file) throws IOException {
 
         Chart chart = new Chart(0, name,null);
 
@@ -171,17 +170,16 @@ public class AdminController {
     }
 
     @GetMapping("/updateChart")
-    public String formUpdateChart(Map<String, Object> model) {
+    public String formUpdateChart() {
+
         return "admin/adminChartUpdate";
     }
 
     @PostMapping("/updateChart")
-    public String updateChart(
-            @RequestParam int chart_id,
-            @RequestParam String name,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(required=false) boolean edit_songs,
-            Map<String, Object> model) throws IOException {
+    public String updateChart(@RequestParam int chart_id,
+                              @RequestParam String name,
+                              @RequestParam("file") MultipartFile file,
+                              @RequestParam(required=false) boolean edit_songs) throws IOException {
 
         Chart chart = new Chart(chart_id, name,null);
 
@@ -203,14 +201,13 @@ public class AdminController {
     }
 
     @GetMapping("/deleteChart")
-    public String formDeleteChart(Map<String, Object> model) {
+    public String formDeleteChart() {
+
         return "admin/adminChartDelete";
     }
 
     @PostMapping("/deleteChart")
-    public String deleteChart(
-            @RequestParam int chart_id,
-            Map<String, Object> model) throws IOException {
+    public String deleteChart(@RequestParam int chart_id) {
 
         adminService.deleteChart(chart_id);
         return "redirect:/admin";
@@ -218,19 +215,18 @@ public class AdminController {
 
     @GetMapping("/createArtist")
     public String formArtist(Map<String, Object> model) {
+
         model.put("new_artist_id", artist_id);
         return "admin/adminArtistCreate";
     }
 
     @PostMapping("/createArtist")
-    public String addArtist(
-            @RequestParam int artist_id,
-            @RequestParam String nickname,
-            @RequestParam String email,
-            @RequestParam String phone,
-            @RequestParam("avatarFile") MultipartFile avatarFile,
-            @RequestParam("pageFile") MultipartFile pageFile,
-            Map<String, Object> model) throws IOException {
+    public String addArtist(@RequestParam int artist_id,
+                            @RequestParam String nickname,
+                            @RequestParam String email,
+                            @RequestParam String phone,
+                            @RequestParam("avatarFile") MultipartFile avatarFile,
+                            @RequestParam("pageFile") MultipartFile pageFile) throws IOException {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
 
@@ -250,8 +246,10 @@ public class AdminController {
 
     @GetMapping("/createSong")
     public String formSong(Map<String, Object> model) {
-        if (album != null)
+
+        if (album != null) {
             model.put("album_id", album.getAlbum_id());
+        }
         else
             model.put("album_id", 0);
 
@@ -259,18 +257,16 @@ public class AdminController {
     }
 
     @PostMapping("/createSong")
-    public String addSong(
-            @RequestParam int album_id,
-            @RequestParam String name,
-            @RequestParam int is_lead_song,
-            @RequestParam int serial_number,
-            @RequestParam int order_number,
-            @RequestParam String featlist,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(required=false) boolean is_last_song,
-            Map<String, Object> model) throws IOException {
+    public String addSong(@RequestParam int album_id,
+                          @RequestParam String name,
+                          @RequestParam int is_lead_song,
+                          @RequestParam int serial_number,
+                          @RequestParam int order_number,
+                          @RequestParam String featlist,
+                          @RequestParam("file") MultipartFile file,
+                          @RequestParam(required=false) boolean is_last_song) throws IOException {
 
-        String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
+        String songFilename = createFileNameAndSaveFile(file, "/mp3/" + album_id, ".mp3");
         Song song = new Song(0, name, artist_id, songFilename);
         int song_id = adminService.saveSong(song);
         song.setSong_id(song_id);
@@ -297,14 +293,13 @@ public class AdminController {
 
     @GetMapping("/createChartlist")
     public String formChartlist(Map<String, Object> model) {
+
         model.put("chart", chart);
         return "admin/adminChartlistCreate";
     }
 
     @PostMapping("/createChartlist")
-    public String addChartlist(
-            @RequestParam String chartlist,
-            Map<String, Object> model) {
+    public String addChartlist(@RequestParam String chartlist) {
 
         String[] songs = chartlist.split("\r\n");
         for (String songData : songs) {
@@ -327,19 +322,18 @@ public class AdminController {
     }
 
     @GetMapping("/updateArtist")
-    public String formUpdateArtist(Map<String, Object> model) {
+    public String formUpdateArtist() {
+
         return "admin/adminArtistUpdate";
     }
 
     @PostMapping("/updateArtist")
-    public String updateArtist(
-            @RequestParam int artist_id,
-            @RequestParam String nickname,
-            @RequestParam String email,
-            @RequestParam String phone,
-            @RequestParam("avatarFile") MultipartFile avatarFile,
-            @RequestParam("pageFile") MultipartFile pageFile,
-            Map<String, Object> model) throws IOException {
+    public String updateArtist(@RequestParam int artist_id,
+                               @RequestParam String nickname,
+                               @RequestParam String email,
+                               @RequestParam String phone,
+                               @RequestParam("avatarFile") MultipartFile avatarFile,
+                               @RequestParam("pageFile") MultipartFile pageFile) throws IOException {
 
         Artist artist = new Artist(artist_id, nickname, email, phone, null, null);
 
@@ -355,20 +349,19 @@ public class AdminController {
     }
 
     @GetMapping("/updateSong")
-    public String formUpdateSong(Map<String, Object> model) {
+    public String formUpdateSong() {
+
         return "admin/adminSongUpdate";
     }
 
     @PostMapping("/updateSong")
-    public String updateSong(
-            @RequestParam int song_id,
-            @RequestParam String name,
-            @RequestParam int is_lead_song,
-            @RequestParam int serial_number,
-            @RequestParam int order_number,
-            @RequestParam String featlist,
-            @RequestParam("file") MultipartFile file,
-            Map<String, Object> model) throws IOException {
+    public String updateSong(@RequestParam int song_id,
+                             @RequestParam String name,
+                             @RequestParam int is_lead_song,
+                             @RequestParam int serial_number,
+                             @RequestParam int order_number,
+                             @RequestParam String featlist,
+                             @RequestParam("file") MultipartFile file) throws IOException {
 
         String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
         int artist_id = adminService.getArtistIdBySongId(song_id);
@@ -396,6 +389,7 @@ public class AdminController {
 
     @GetMapping("/user")
     public String userList(Model model) {
+
         model.addAttribute("users", adminService.getAllUsers());
         return "admin/userlist";
     }
@@ -403,6 +397,7 @@ public class AdminController {
     @GetMapping("/user/{user_id}")
     public String userEditForm(@PathVariable int user_id,
                                Model model) {
+
         model.addAttribute("user_edit", adminService.getUserById(user_id));
         model.addAttribute("roles", Role.values());
         return "admin/user_edit";
@@ -437,6 +432,7 @@ public class AdminController {
 
         return "redirect:/admin/user";
     }
+
 
     public static boolean isParsable(String input) {
         try {
