@@ -25,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/registration",
                             "/static/**",
                             "/img/**",
+                            "/mp3/**",
                             "/browse/**",
                             "/search/**",
                             "/project_DB/**",
