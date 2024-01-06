@@ -3,6 +3,7 @@ package ru.mirea.musicsite.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Song;
 import ru.mirea.musicsite.services.BrowseService;
 
@@ -31,8 +32,9 @@ public class PlayerController {
                            @RequestParam int song_id) {
 
         Song song = browseService.showSong(song_id);
+        int album_id = browseService.showAlbumBySongId(song_id).getAlbum_id();
 
-        playing_song_src = "/mp3/" + song.getSong_file();
+        playing_song_src = String.format("/mp3/%s/%s", album_id, song.getSong_file());
         playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
         playing_song_name = song.getName();
 
