@@ -3,8 +3,8 @@ package ru.mirea.musicsite.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.mirea.musicsite.entities.Album;
 import ru.mirea.musicsite.entities.Song;
+import ru.mirea.musicsite.repositories.SongRepository;
 import ru.mirea.musicsite.services.BrowseService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +15,18 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("")
 public class PlayerController {
 
-    private final BrowseService browseService;
+    private BrowseService browseService;
+
+    private SongRepository songRepository;
 
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
 
 
-    public PlayerController(BrowseService browseService) {
+    public PlayerController(BrowseService browseService, SongRepository songRepository) {
         this.browseService = browseService;
+        this.songRepository = songRepository;
     }
 
 
@@ -37,6 +40,8 @@ public class PlayerController {
         playing_song_src = String.format("/mp3/%s/%s", album_id, song.getSong_file());
         playing_song_author = browseService.showArtist(song.getMain_artist_id()).getNickname();
         playing_song_name = song.getName();
+
+        songRepository.updateListening(song_id);
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;

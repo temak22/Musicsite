@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mirea.musicsite.entities.*;
+import ru.mirea.musicsite.repositories.SongRepository;
 import ru.mirea.musicsite.security.entities.Role;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.security.services.AdminService;
+import ru.mirea.musicsite.services.BrowseService;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +25,9 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
-    @Autowired
     private AdminService adminService;
+
+    private SongRepository songRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -35,6 +38,11 @@ public class AdminController {
     private Chart chart;
     private boolean edit_songs;
 
+
+    public AdminController(AdminService adminService, SongRepository songRepository) {
+        this.adminService = adminService;
+        this.songRepository = songRepository;
+    }
 
     @GetMapping("")
     public String home() {
@@ -267,7 +275,7 @@ public class AdminController {
                           @RequestParam(required=false) boolean is_last_song) throws IOException {
 
         String songFilename = createFileNameAndSaveFile(file, "/mp3/" + album_id, ".mp3");
-        Song song = new Song(0, name, artist_id, songFilename);
+        Song song = new Song(0, name, artist_id, songFilename, 0);
         int song_id = adminService.saveSong(song);
         song.setSong_id(song_id);
 
@@ -365,7 +373,8 @@ public class AdminController {
 
         String songFilename = createFileNameAndSaveFile(file, "/mp3", ".mp3");
         int artist_id = adminService.getArtistIdBySongId(song_id);
-        Song song = new Song(song_id, name, artist_id, songFilename);
+
+        Song song = new Song(song_id, name, artist_id, songFilename, songRepository.show(song_id).getListening());
         adminService.updateSong(song_id, song);
 
         adminService.deleteFeatArtists(song_id);

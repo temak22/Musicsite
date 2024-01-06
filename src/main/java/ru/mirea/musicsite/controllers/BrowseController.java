@@ -15,6 +15,7 @@ import ru.mirea.musicsite.dtos.SongDto;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -199,7 +200,8 @@ public class BrowseController {
                     song_id,
                     song.getName(),
                     album,
-                    is_in_library));
+                    is_in_library,
+                    song.getListening()));
         }
 
         for (FeatArtist feat : feats) {
@@ -222,8 +224,11 @@ public class BrowseController {
                     song_id,
                     song.getName(),
                     album,
-                    is_in_library));
+                    is_in_library,
+                    song.getListening()));
         }
+
+        songList.sort(Comparator.comparingInt(ArtistSongDto::getListening).reversed());
 
         return songList;
     }

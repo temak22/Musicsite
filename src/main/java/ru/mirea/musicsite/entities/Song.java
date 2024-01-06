@@ -11,12 +11,15 @@ public class Song {
 
     private String song_file;
 
+    private int listening;
 
-    public Song(int song_id, String name, int main_artist_id, String song_file) {
+
+    public Song(int song_id, String name, int main_artist_id, String song_file, int listening) {
         this.song_id = song_id;
         this.name = name;
         this.main_artist_id = main_artist_id;
         this.song_file = song_file;
+        this.listening = listening;
     }
 
     public Song() {
@@ -52,5 +55,13 @@ public class Song {
 
     public void setSong_file(String song_file) {
         this.song_file = song_file;
+    }
+
+    public int getListening() {
+        return listening;
+    }
+
+    public void setListening(int listening) {
+        this.listening = listening;
     }
 }

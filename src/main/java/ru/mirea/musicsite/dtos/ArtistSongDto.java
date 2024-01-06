@@ -13,12 +13,15 @@ public class ArtistSongDto {
 
     private int is_in_library;
 
+    private int listening;
 
-    public ArtistSongDto(int song_id, String name, Album album, int is_in_library) {
+
+    public ArtistSongDto(int song_id, String name, Album album, int is_in_library, int listening) {
         this.song_id = song_id;
         this.name = name;
         this.album = album;
         this.is_in_library = is_in_library;
+        this.listening = listening;
     }
 
     public ArtistSongDto() {}
@@ -53,5 +56,13 @@ public class ArtistSongDto {
 
     public void setIs_in_library(int is_in_library) {
         this.is_in_library = is_in_library;
+    }
+
+    public int getListening() {
+        return listening;
+    }
+
+    public void setListening(int listening) {
+        this.listening = listening;
     }
 }

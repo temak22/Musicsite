@@ -37,7 +37,7 @@ public class SongRepository {
     public int save(Song song) {
         int id = count() + 1;
         jdbcTemplate.update(
-                "INSERT INTO Song VALUES (?, ?, ?, ?)",
+                "INSERT INTO Song VALUES (?, ?, ?, ?, 0)",
                 id,
                 song.getName(),
                 song.getMain_artist_id(),
@@ -82,5 +82,11 @@ public class SongRepository {
                 "SELECT * FROM Song WHERE Name LIKE ? OR Name LIKE ?",
                 new Object[]{partname1, partname2},
                 new BeanPropertyRowMapper<>(Song.class));
+    }
+
+    public void updateListening(int id) {
+        jdbcTemplate.update(
+                "UPDATE Song SET Listening=Listening + 1 WHERE Song_id=?",
+                id);
     }
 }
