@@ -40,10 +40,12 @@ public class BrowseService extends RepositoriesCollection {
                 .sorted(Comparator.comparingInt(Song::getListening).reversed())
                 .toList();
 
-        int amountOfLeadSongsOnAlbum = 1;
-        if (songs.size() > 6 & songs.size() <= 14)
+        int amountOfLeadSongsOnAlbum;
+        if (songs.size() <= 6)
+            amountOfLeadSongsOnAlbum = 1;
+        else if (songs.size() <= 14)
             amountOfLeadSongsOnAlbum = 2;
-        else if (songs.size() > 14 & songs.size() <= 19)
+        else if (songs.size() <= 19)
             amountOfLeadSongsOnAlbum = 3;
         else
             amountOfLeadSongsOnAlbum = 4;
