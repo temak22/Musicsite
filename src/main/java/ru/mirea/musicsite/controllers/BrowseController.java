@@ -61,6 +61,7 @@ public class BrowseController {
         else
             currentUser = null;
 
+        browseService.refreshAlbumLeadSongs(id);
 
         List<SongInAlbum> songsInAlbum = browseService.showSongsByAlbumId(id);
         model.addAttribute("songsInBrowse", convertToAlbumSongDtoList(songsInAlbum));

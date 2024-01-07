@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.mirea.musicsite.entities.Song;
+import ru.mirea.musicsite.entities.SongInAlbum;
 
 import java.util.List;
 
