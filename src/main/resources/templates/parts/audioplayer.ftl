@@ -11,7 +11,7 @@
             </h5>
 
             <div class="podcast__meta">
-                <audio controls loop width="100%" src="${song_src!"null"}"></audio>
+                <audio preload="metadata" width="100%" src="${song_src!"null"}"></audio>
             </div>
         </div>
     </div>

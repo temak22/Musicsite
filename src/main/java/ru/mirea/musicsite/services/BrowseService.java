@@ -2,15 +2,10 @@ package ru.mirea.musicsite.services;
 
 import org.springframework.stereotype.Service;
 import ru.mirea.musicsite.RepositoriesCollection;
-import ru.mirea.musicsite.dtos.ArtistSongDto;
 import ru.mirea.musicsite.entities.*;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class BrowseService extends RepositoriesCollection {

@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.mirea.musicsite.entities.Song;
-import ru.mirea.musicsite.entities.SongInAlbum;
 
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class SongRepository {
 
     public List<Song> showByArtistId(int id) {
         return jdbcTemplate.query(
-                        "SELECT * FROM Song WHERE Main_artist_id=?",
+                        "SELECT * FROM Song WHERE Main_artist_id=? ORDER BY Name",
                         new Object[]{id},
                         new BeanPropertyRowMapper<>(Song.class));
     }
