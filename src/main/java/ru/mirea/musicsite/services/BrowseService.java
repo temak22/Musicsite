@@ -101,8 +101,16 @@ public class BrowseService extends RepositoriesCollection {
         return songInLibraryRepository.save(songInLibrary);
     }
 
+    public void deleteSongInLibrary(SongInLibrary songInLibrary) {
+        songInLibraryRepository.delete(songInLibrary.getUser_id(), songInLibrary.getSong_id());
+    }
+
     public int addAlbumInLibrary(AlbumInLibrary albumInLibrary) {
         return albumInLibraryRepository.save(albumInLibrary);
+    }
+
+    public void deleteAlbumInLibrary(AlbumInLibrary albumInLibrary) {
+        albumInLibraryRepository.delete(albumInLibrary.getUser_id(), albumInLibrary.getAlbum_id());
     }
 
     public boolean isSongInLibrary(int user_id, int song_id) {

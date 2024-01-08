@@ -11,7 +11,6 @@ import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -156,51 +155,5 @@ public class BrowseController {
         model.addAttribute("songsInArtistBrowse", converter.convertSongsAndFeatsToArtistSongDtoList(songs, feats, currentUser));
 
         return "main/browseArtistSongs";
-    }
-
-    @PostMapping("/addSong")
-    public String addSong(HttpServletRequest request,
-                          Authentication auth,
-                          @RequestParam int song_id) {
-
-        if (auth != null)
-            currentUser = (User)auth.getPrincipal();
-        else
-            currentUser = null;
-
-
-        SongInLibrary songInLibrary;
-        if (currentUser != null)
-            songInLibrary = new SongInLibrary(currentUser.getUser_id(), song_id);
-        else
-            songInLibrary = new SongInLibrary(0, song_id);
-
-        browseService.addSongInLibrary(songInLibrary);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
-
-    @PostMapping("/addAlbum")
-    public String addAlbum(HttpServletRequest request,
-                           Authentication auth,
-                           @RequestParam int album_id) {
-
-        if (auth != null)
-            currentUser = (User)auth.getPrincipal();
-        else
-            currentUser = null;
-
-
-        AlbumInLibrary albumInLibrary;
-        if (currentUser != null)
-            albumInLibrary = new AlbumInLibrary(currentUser.getUser_id(), album_id);
-        else
-            albumInLibrary = new AlbumInLibrary(0, album_id);
-
-        browseService.addAlbumInLibrary(albumInLibrary);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
     }
 }
