@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
-    private AdminService adminService;
-
-    private SongRepository songRepository;
+    private final AdminService adminService;
+    private final SongRepository songRepository;
 
     @Value("${upload.path}")
     private String uploadPath;

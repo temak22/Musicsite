@@ -48,6 +48,13 @@ public class AlbumInLibraryRepository {
                 new BeanPropertyRowMapper<>(AlbumInLibrary.class));
     }
 
+    public List<AlbumInLibrary> showByUserIdGroupByStyle(int id) {
+        return jdbcTemplate.query(
+                "SELECT * FROM Album_in_library WHERE User_id=?",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(AlbumInLibrary.class));
+    }
+
     public void delete(int user_id, int album_id) {
         jdbcTemplate.update(
                 "DELETE FROM Album_in_library WHERE Album_id=? AND User_id=?",

@@ -3,9 +3,17 @@ package ru.mirea.musicsite.services;
 import org.springframework.stereotype.Service;
 import ru.mirea.musicsite.RepositoriesCollection;
 import ru.mirea.musicsite.entities.*;
+import ru.mirea.musicsite.security.entities.User;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class BrowseService extends RepositoriesCollection {
@@ -56,6 +64,48 @@ public class BrowseService extends RepositoriesCollection {
             songInAlbum.setIs_lead_song(1);
             songInAlbumRepository.update(id, song.getSong_id(), songInAlbum);
         });
+    }
+
+    public String findRecommendStyle(User user) {
+        List<AlbumInLibrary> albumsInLibrary = albumInLibraryRepository.showByUserId(user.getUser_id());
+
+        List<Album> albums = albumsInLibrary.stream()
+                .map(albumInLibrary -> albumRepository.show(albumInLibrary.getAlbum_id()))
+                .toList();
+
+        Map<String, List<Album>> albumsPerStyle = albums.stream()
+                .collect(groupingBy(Album::getStyle));
+
+        AtomicReference<String> recommendStyle = new AtomicReference<>();
+        AtomicInteger maxAlbums = new AtomicInteger();
+        albumsPerStyle.forEach((style, albumsList) -> {
+            if (albumsList.size() > maxAlbums.get()) {
+                maxAlbums.set(albumsList.size());
+                recommendStyle.set(style);
+            }
+        });
+
+        return recommendStyle.get();
+    }
+
+    public List<Album> indexRecommendAlbums(User user) {
+        List<AlbumInLibrary> albumsInLibrary = albumInLibraryRepository.showByUserId(user.getUser_id());
+
+        List<Integer> albumsInLibraryIds = albumsInLibrary.stream()
+                .map(AlbumInLibrary::getAlbum_id)
+                .toList();
+
+        String recommendStyle = findRecommendStyle(user);
+
+        List<Album> albumsByRecommendStyle = albumRepository.showByStyle(recommendStyle);
+        List<Album> recommendAlbums = new ArrayList<>();
+        albumsByRecommendStyle.forEach(album -> {
+            if (!albumsInLibraryIds.contains(album.getAlbum_id())) {
+                recommendAlbums.add(album);
+            }
+        });
+
+        return recommendAlbums;
     }
 
 

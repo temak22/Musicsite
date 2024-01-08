@@ -11,6 +11,7 @@ import ru.mirea.musicsite.entities.*;
 import ru.mirea.musicsite.security.entities.User;
 import ru.mirea.musicsite.services.BrowseService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,22 +29,28 @@ public class BrowseController {
 
 
     @GetMapping("")
-    public String browse(Model model) {
-        List<Album> albums = browseService.indexAlbum();
-        model.addAttribute("albumsInBrowse", converter.convertAlbumsToAlbumDtoList(albums));
+    public String browse(Authentication auth,
+                         Model model) {
+
+        if (auth != null)
+            currentUser = (User)auth.getPrincipal();
+        else
+            currentUser = null;
+
 
         List<Chart> charts = browseService.indexChart();
         model.addAttribute("charts", charts);
 
+        if (currentUser != null) {
+            String recommendStyle = browseService.findRecommendStyle(currentUser);
+            model.addAttribute("recommendStyle", recommendStyle);
+
+            List<Album> recommendAlbums = browseService.indexRecommendAlbums(currentUser);
+            model.addAttribute("recommendAlbums", converter.convertAlbumsToAlbumDtoList(recommendAlbums));
+        } else
+            model.addAttribute("recommendAlbums", new ArrayList<>());
+
         return "main/browse";
-    }
-
-    @GetMapping("/albums")
-    public String browseAlbums(Model model) {
-        List<Album> albums = browseService.indexAlbum();
-        model.addAttribute("albumsInBrowse", converter.convertAlbumsToAlbumDtoList(albums));
-
-        return "main/browseAlbums";
     }
 
     @GetMapping("/albums/{id}")

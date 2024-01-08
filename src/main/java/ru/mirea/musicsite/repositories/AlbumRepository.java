@@ -88,6 +88,13 @@ public class AlbumRepository {
                 new BeanPropertyRowMapper<>(Album.class));
     }
 
+    public List<Album> showByStyle(String style) {
+        return jdbcTemplate.query(
+                "SELECT * FROM Album WHERE Style=?",
+                new Object[]{style},
+                new BeanPropertyRowMapper<>(Album.class));
+    }
+
     public List<Album> showByPartName(String partname1, String partname2) {
         return jdbcTemplate.query(
                 "SELECT * FROM Album WHERE Name LIKE ? OR Name LIKE ?",
