@@ -1,5 +1,5 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSong.ftl" as add>
+<#import "../parts/addToLibrary.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
 
 
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div style="width: 20%; display: flex; justify-content: flex-end">
-                                <@add.addsong song.song_id song.is_in_library/>
+                                <@add.addSong song.song_id song.is_in_library/>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                     </div>
                                 </div>
                                 <div style="width: 20%; display: flex; justify-content: flex-end">
-                                    <@add.addsong song.song_id song.is_in_library/>
+                                    <@add.addSong song.song_id song.is_in_library/>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div style="width: 20%; display: flex; justify-content: flex-end">
-                                    <@add.addsong song.song_id song.is_in_library/>
+                                    <@add.addSong song.song_id song.is_in_library/>
                                 </div>
                             </div>
                         </div>

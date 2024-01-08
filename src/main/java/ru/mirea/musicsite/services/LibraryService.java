@@ -19,6 +19,11 @@ public class LibraryService extends RepositoriesCollection {
     }
 
 
+    public Album showAlbum(int id) {
+        return albumRepository.show(id);
+    }
+
+
     public Album showAlbumBySongId(int id) {
         SongInAlbum songInAlbum = songInAlbumRepository.showBySongId(id);
         return albumRepository.show(songInAlbum.getAlbum_id());
@@ -31,5 +36,9 @@ public class LibraryService extends RepositoriesCollection {
 
     public List<SongInLibrary> showSongsInLibraryByUserId(int id) {
         return songInLibraryRepository.showByUserId(id);
+    }
+
+    public List<AlbumInLibrary> showAlbumsInLibraryByUserId(int id) {
+        return albumInLibraryRepository.showByUserId(id);
     }
 }

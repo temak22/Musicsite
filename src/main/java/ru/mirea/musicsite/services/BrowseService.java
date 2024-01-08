@@ -101,9 +101,17 @@ public class BrowseService extends RepositoriesCollection {
         return songInLibraryRepository.save(songInLibrary);
     }
 
-    public boolean isInLibrary(int user_id, int song_id) {
+    public int addAlbumInLibrary(AlbumInLibrary albumInLibrary) {
+        return albumInLibraryRepository.save(albumInLibrary);
+    }
+
+    public boolean isSongInLibrary(int user_id, int song_id) {
         SongInLibrary songInLibrary = songInLibraryRepository.show(user_id, song_id);
         return songInLibrary != null;
     }
 
+    public boolean isAlbumInLibrary(int user_id, int album_id) {
+        AlbumInLibrary albumInLibrary = albumInLibraryRepository.show(user_id, album_id);
+        return albumInLibrary != null;
+    }
 }

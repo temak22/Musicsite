@@ -1,5 +1,6 @@
 package ru.mirea.musicsite.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,19 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("")
 public class PlayerController {
 
+    @Autowired
     private BrowseService browseService;
 
+    @Autowired
     private SongRepository songRepository;
 
     private String playing_song_src;
     private String playing_song_author;
     private String playing_song_name;
-
-
-    public PlayerController(BrowseService browseService, SongRepository songRepository) {
-        this.browseService = browseService;
-        this.songRepository = songRepository;
-    }
 
 
     @PostMapping("/playSong")

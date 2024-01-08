@@ -28,4 +28,7 @@ public class RepositoriesCollection {
 
     @Autowired
     public SongInLibraryRepository songInLibraryRepository;
+
+    @Autowired
+    public AlbumInLibraryRepository albumInLibraryRepository;
 }

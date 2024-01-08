@@ -1,19 +1,17 @@
 package ru.mirea.musicsite.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import ru.mirea.musicsite.entities.Album;
-import ru.mirea.musicsite.entities.Artist;
-import ru.mirea.musicsite.entities.Song;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import ru.mirea.musicsite.DtoConverter;
+import ru.mirea.musicsite.entities.AlbumInLibrary;
 import ru.mirea.musicsite.entities.SongInLibrary;
 import ru.mirea.musicsite.security.entities.User;
-import ru.mirea.musicsite.services.BrowseService;
 import ru.mirea.musicsite.services.LibraryService;
-import ru.mirea.musicsite.dtos.SongDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,14 +19,11 @@ import java.util.List;
 @RequestMapping("/library")
 public class LibraryController {
 
-    private final LibraryService libraryService;
-    private final BrowseService browseService;
+    @Autowired
+    private LibraryService libraryService;
 
-
-    public LibraryController(LibraryService libraryService, BrowseService browseService) {
-        this.libraryService = libraryService;
-        this.browseService = browseService;
-    }
+    @Autowired
+    private DtoConverter converter;
 
 
     @GetMapping("")
@@ -43,25 +38,20 @@ public class LibraryController {
         User realUser = (User)auth.getPrincipal();
 
         List<SongInLibrary> songsInLibrary = libraryService.showSongsInLibraryByUserId(realUser.getUser_id());
-        model.addAttribute("songsInBrowse", convertToSongDtoList(songsInLibrary));
+        model.addAttribute("songsInLibrary", converter.convertSongsInLibraryToSongDtoList(songsInLibrary));
 
         return "library/librarySongs";
     }
 
+    @GetMapping("/albums")
+    public String libraryAlbums(Authentication auth,
+                                Model model) {
 
-    private ArrayList<SongDto> convertToSongDtoList(List<SongInLibrary> songsInLibrary) {
-        ArrayList<SongDto> songList = new ArrayList<>();
+        User realUser = (User)auth.getPrincipal();
 
-        for (SongInLibrary songInLibrary : songsInLibrary) {
-            int song_id = songInLibrary.getSong_id();
+        List<AlbumInLibrary> albumsInLibrary = libraryService.showAlbumsInLibraryByUserId(realUser.getUser_id());
+        model.addAttribute("albumsInLibrary", converter.convertAlbumsInLibraryToAlbumDtoList(albumsInLibrary));
 
-            Song song = libraryService.showSong(song_id);
-            Artist artist = libraryService.showArtist(song.getMain_artist_id());
-            Album album = libraryService.showAlbumBySongId(song_id);
-
-            songList.add(new SongDto(song.getSong_id(), song.getName(), artist, album, 1));
-        }
-
-        return songList;
+        return "library/libraryAlbums";
     }
 }

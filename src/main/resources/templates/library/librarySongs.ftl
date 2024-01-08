@@ -12,7 +12,7 @@
         <hr>
     </div>
     <div style="display: flex; flex-direction: column">
-        <#list songsInBrowse as song>
+        <#list songsInLibrary as song>
             <hr style="margin-inline: 10px">
             <div style="margin: 5px">
                 <div class="row" style="margin-inline: 10px">

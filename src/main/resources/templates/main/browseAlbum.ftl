@@ -1,15 +1,15 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSong.ftl" as add>
+<#import "../parts/addToLibrary.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
 
 
 <@c.page playing_song_src!"null" playing_song_name!"" playing_song_author!"">
     <hr>
-    <div class="row" style="height: 300px">
+    <div class="row" style="height: 300px; width: 100%">
         <div style="margin: 10px">
             <img src="/img/covers/${albumInBrowse.album.cover_file}" height="280" width="280" style="border-radius: 8px;">
         </div>
-        <div style="display: flex; height: 60%; flex-direction: column; justify-content: flex-end; margin-left: 20px">
+        <div style="display: flex; height: 60%; flex-direction: column; justify-content: flex-end; margin-left: 20px; width:40% ">
             <h2 style="margin-bottom: 0">${albumInBrowse.album.name}</h2>
             <a style="color: crimson; font-size: 22px;" href="/browse/artists/${albumInBrowse.artist.artist_id}">${albumInBrowse.artist.nickname}</a>
 
@@ -17,6 +17,13 @@
                 <h7 style="margin-bottom: 0; font-weight: inherit;">${albumInBrowse.album.style}</h7>
                 <h6 style="margin-inline: 4px">.</h6>
                 <h7 style="margin-bottom: 0">${albumInBrowse.album.release_date?string('yyyy')}</h7>
+            </div>
+        </div>
+        <div style="width: 30%; display: flex; justify-content: flex-end; margin-bottom: 0">
+            <div style="width: fit-content; display: flex; justify-content: flex-end; margin-bottom: 0">
+                <div style="display: flex; justify-content: flex-start; flex-direction: column; margin-top: 10px">
+                    <@add.addAlbum albumInBrowse.album.album_id albumInBrowse.is_in_library/>
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +54,7 @@
                         </div>
                     </div>
                     <div style="width: fit-content; display: flex; justify-content: flex-end">
-                        <@add.addsong song.song_id song.is_in_library/>
+                        <@add.addSong song.song_id song.is_in_library/>
                     </div>
                 </div>
             </div>

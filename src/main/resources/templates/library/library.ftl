@@ -7,5 +7,10 @@
             Songs
         </a>
     </div>
+    <div style="display: flex; flex-direction: column; width: inherit; margin-right: 20px">
+        <a href="/library/albums" style="width: inherit; margin-right: 20px; padding: 10px; margin-bottom: 10px; background-color: #cccccc; border: solid grey; text-decoration: none; color: grey">
+            Albums
+        </a>
+    </div>
     <br><br>
 </@c.page>

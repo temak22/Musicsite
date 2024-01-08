@@ -10,10 +10,13 @@ public class AlbumDto {
 
     private Artist artist;
 
+    private int is_in_library;
 
-    public AlbumDto(Album album, Artist artist) {
+
+    public AlbumDto(Album album, Artist artist, int is_in_library) {
         this.album = album;
         this.artist = artist;
+        this.is_in_library = is_in_library;
     }
 
     public AlbumDto() {}
@@ -32,5 +35,13 @@ public class AlbumDto {
 
     public void setArtist(Artist artist) {
         this.artist = artist;
+    }
+
+    public int getIs_in_library() {
+        return is_in_library;
+    }
+
+    public void setIs_in_library(int is_in_library) {
+        this.is_in_library = is_in_library;
     }
 }

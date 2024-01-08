@@ -1,5 +1,5 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/addSong.ftl" as add>
+<#import "../parts/addToLibrary.ftl" as add>
 <#import "../parts/playSong.ftl" as play>
 
 
@@ -44,11 +44,10 @@
                         <div style="width: 30%; display: flex; justify-content: flex-end; margin-bottom: 0">
                             <div style="width: fit-content; display: flex; justify-content: flex-end; margin-bottom: 0">
                                 <div style="display: flex; justify-content: center; flex-direction: column">
-                                    <@add.addsong song.song_id song.is_in_library/>
+                                    <@add.addSong song.song_id song.is_in_library/>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             <#else>
